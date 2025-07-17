@@ -1,4 +1,6 @@
 #include <iostream>
+#include <math.h>
+#include <limits.h>
 using namespace std;
 
 void PrintNumN();
@@ -10,6 +12,10 @@ void primeToN();
 void checkIsPrime();
 void fibonacciSeries();
 void subtractProductAndSum();
+void BinToDec();
+void DecToBin();
+void reverseInt();
+void isPower2();
 
 int main(){
     // PrintNumN();
@@ -20,7 +26,11 @@ int main(){
     // primeToN();
     // checkIsPrime();
     // fibonacciSeries();
-    subtractProductAndSum();
+    // subtractProductAndSum();
+    // BinToDec();
+    // DecToBin();
+    // reverseInt();
+    isPower2();
     return 0;
 }
 
@@ -139,7 +149,7 @@ void fibonacciSeries(){
 
 
 void subtractProductAndSum(){
-    int n = 119;
+    int n = 189;
     int prod = 1;
     int sum = 0;
     while(n != 0){
@@ -153,4 +163,71 @@ void subtractProductAndSum(){
     int ans = prod - sum;
 
     cout << "subtract product and sum => " << ans << endl;
+}
+
+void BinToDec(){
+    int n = 101;
+    int ans = 0;
+    int i = 0;
+    while(n!=0){
+        int digit = n % 10;
+        if(digit == 1){
+            ans = ans + pow(2, i);
+        }
+        n = n/10;
+        i++;
+    }
+    cout << "Binary to decimal 1010 of => " << ans << endl;
+}
+
+void DecToBin(){
+    int n = 3;
+    int i = 0;
+    int ans = 0;
+
+    while(n != 0){
+        int bit = n & 1;
+        double bitVal = bit * (pow(10, i));
+        ans = bitVal + ans;
+        n = n >> 1;
+        i++;
+    }
+
+    cout << "Decimal 7 to binary => " << ans << endl;
+
+}
+
+void reverseInt(){
+    int n = 98709;
+    int ans = 0;
+    while(n != 0){
+        int digit = n % 10;
+
+        if((ans  > INT_MAX/10) || (ans < INT_MIN/10)){
+            return;
+        }
+
+        ans = (ans * 10) + digit;
+        n = n / 10;
+    }
+
+    cout << "Reverse of " << "98709" << " is " << ans << endl; 
+}
+
+void isPower2(){
+    int n =  32768*32768;
+    int ans = 1;
+
+    for(int i = 0; i <= 30; i ++){
+        if(n == ans){
+            cout << "Given "<< n << " is power of 2" << endl;
+            return;
+        }
+
+        if(ans < INT_MAX / 2){
+            ans = ans * 2;
+        }
+    }
+
+    cout << "Given "<< n << " is not power of 2" << endl;
 }
