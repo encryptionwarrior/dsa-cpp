@@ -16,6 +16,11 @@ void BinToDec();
 void DecToBin();
 void reverseInt();
 void isPower2();
+void bitwiseComplement();
+void powerMN();
+void nCr();
+void isEven();
+void printCounting();
 
 int main(){
     // PrintNumN();
@@ -30,7 +35,12 @@ int main(){
     // BinToDec();
     // DecToBin();
     // reverseInt();
-    isPower2();
+    // isPower2();
+    // bitwiseComplement();
+    // powerMN();
+    // nCr();
+    // isEven();
+    printCounting();
     return 0;
 }
 
@@ -230,4 +240,75 @@ void isPower2(){
     }
 
     cout << "Given "<< n << " is not power of 2" << endl;
+}
+
+void bitwiseComplement(){
+int n = 9;
+int m = n;
+int mask = 0;
+
+
+if(n == 0 ){
+     cout << "compliment of bitwise is " << 1 << endl;
+    return;
+}
+
+while( m!= 0 ){
+    mask = (mask << 1) | 1;
+    m = m >> 1;
+    cout << "Check mask " << mask << " m " << m << endl;
+}
+
+int ans = ~n&mask;
+
+    cout << "compliment of bitwise is " << ans << endl;
+}
+
+void powerMN(){
+    int n1 = 2;
+    int n2 = 5;
+
+    int ans = 1;
+    for(int i = 1; i <= n2; i++){
+        ans = ans * n1;
+    }
+
+    cout  << "Final answer is here of power " << ans << endl;
+}
+
+int factorial(int n){
+    int fact = 1;
+    for(int i = 1; i <= n; i++){
+        fact = fact * i;
+    }
+
+    return fact;
+}
+
+void nCr(){
+    int n = 5;
+    int r = 2;
+    int num = factorial(n);
+    int denom = factorial(r) * factorial(n-r);
+    cout << "check num and denom " << num << denom << endl;
+    int ans = num/denom;
+
+    cout << "nCr is " << ans << endl;
+}
+
+void isEven(){
+    int n = 41;
+    if(n & 1){
+        cout << "Given number is odd " << n << endl;
+    } else {
+         cout << "Given number is even " << n << endl;
+    }
+}
+
+void printCounting(){
+    int n = 30;
+    cout << "counting is ";
+    for(int i = 1; i <= n; i++){
+        cout  << i << " " << endl;
+    }
 }
