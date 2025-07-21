@@ -63,9 +63,7 @@ void binarySearchRecursive(){
     int right = n - 1;
     int target = 23;
 
-    
-
     int elemAT = binaryRecursive(arr, left, right, target);
-
     cout << "Index found at => " << elemAT << endl;
 }
+
