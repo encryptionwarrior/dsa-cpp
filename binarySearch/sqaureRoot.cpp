@@ -24,11 +24,11 @@ long long int sqrtInteger(int n){
 }
 
 double morePrecision(int n, int precsion, int tempSol){
-    double factorial = 1;
+    double factor = 1;
     double ans = tempSol;
     for(int i = 0; i < precsion; i++){
-        factorial = factorial/10;
-        for(int j = ans; j * j < n; j = j + factorial){
+        factor = factor/10;
+        for(double j = ans; j * j < n; j = j + factor){
             ans = j;
         }
     }
