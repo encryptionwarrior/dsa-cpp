@@ -160,6 +160,51 @@ void celebrityProblem(){
 
 }
 
+// max reactangle matrix
+int maxArea(vector<vector<int>> matrix){
+    int n = matrix.size();
+    int m = matrix[0].size();
+
+    int area = largestReactangularArea(matrix[0]);
+
+    for(int i = 1; i < n; i++){
+        for(int j = 0; j < m; j++){
+            if(matrix[i][j] != 0){
+                matrix[i][j] += matrix[i-1][j];
+            } else {
+                matrix[i][j] = 0;
+            }
+        } 
+
+        int currArea = largestReactangularArea(matrix[i]);
+        area = max(area, currArea);
+    }
+
+    return area;
+}
+
+void getMaxMatrix(){
+    vector<vector<int>> matrix;
+    int size;
+
+    cout << "Enter the size (N for N * N ): ";
+    cin >> size;
+
+    cout << "Enter the matrix elements (0s and 1s, N * N) : " << endl;
+
+    for(int i = 0; i < size; i++){
+        vector<int> temp_row(size);
+        for(int j = 0; j < size; j++){
+            cin >> temp_row[i];
+        }
+        matrix.push_back(temp_row);
+
+    }
+
+    cout << "Maximum area of reactangle of 1s: " << maxArea(matrix) << endl;
+}
+
+
 int main(){
 
 //     vector<int> height = {2, 1, 5, 6, 2, 3};
@@ -168,6 +213,7 @@ int main(){
 
 
     // checkSmallerElement();
-    celebrityProblem();
+    // celebrityProblem();
+    getMaxMatrix();
     return 0;
 }
