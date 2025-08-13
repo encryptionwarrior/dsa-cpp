@@ -103,13 +103,71 @@ int largestReactangularArea(vector<int> height){
 
 }
 
+int findCelebrity(vector<vector<int>> matrix){
+    stack<int> st;
+    int n = matrix.size();
+
+    for(int i = 0; i < n; i++){
+        st.push(i);
+    }
+
+    while(st.size() > 1){
+        int a = st.top();
+        st.pop();
+        int b = st.top();
+        st.pop();
+
+        if(matrix[a][b] == 1){
+            st.push(b);
+        } else {
+            st.push(a);
+        }
+    }
+
+    int candidate = st.top();
+
+    for(int i = 0; i < n; i++){
+        if(matrix[candidate][i] == 1){
+            return -1;
+        }
+    }
+
+    for(int i = 0; i < n; i++){
+        if(matrix[i][candidate] == 0 && i != candidate){
+            return -1;
+        }
+    }
+
+    return candidate;
+}
+
+void celebrityProblem(){
+    vector<vector<int>> matrix;
+    int size;
+
+    cout << "Enter the size (N) of the matrix : ";
+    cin >> size;
+
+    cout << "Enter the matrix elements (0s and 1s, n * N):" << endl;
+
+    for(int i = 0; i < size; i++){
+        vector<int> row(size);
+        for(int j = 0; j < size; j++){
+            cin >> row[j];
+        }
+        matrix.push_back(row);
+    }
+
+}
+
 int main(){
 
-    vector<int> height = {2, 1, 5, 6, 2, 3};
- cout << "Required area : " << largestReactangularArea(height) << endl;
+//     vector<int> height = {2, 1, 5, 6, 2, 3};
+//  cout << "Required area : " << largestReactangularArea(height) << endl;
 
 
 
-    checkSmallerElement();
+    // checkSmallerElement();
+    celebrityProblem();
     return 0;
 }
