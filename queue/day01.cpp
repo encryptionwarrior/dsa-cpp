@@ -1,5 +1,6 @@
 #include<iostream>
 #include<queue>
+#include<deque>
 using namespace std;
 
 void queueBasic(){
@@ -271,9 +272,19 @@ void CircularQueue(){
 
 }
 
+void doublyEndedQueue(){
+    deque<int> q;
+    q.push_front(11);
+    q.push_back(14);
+
+    cout << "Front element of q: " << q.front() << endl;
+    cout << "Back element of q: " << q.back() << endl;
+}
+
 int main(){
     // queueBasic();
     // manualQueue();
-    CircularQueue();
+    // CircularQueue();
+    doublyEndedQueue();
     return 0;
 }
