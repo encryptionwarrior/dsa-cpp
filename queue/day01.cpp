@@ -281,10 +281,152 @@ void doublyEndedQueue(){
     cout << "Back element of q: " << q.back() << endl;
 }
 
+class Dequeue {
+    int *arr;
+    int size;
+    int front;
+    int rear;
+
+    public: 
+        Dequeue(int s){
+            size = s;
+            arr = new int[size];
+            front = -1;
+            rear = -1;
+        }
+
+    void push_front(int val){
+        if((front == 0 && rear == size -1) || (front != -1 && rear == front - 1 + size)%size){
+            cout << "Deque overflow!" << endl;
+            return;
+        }
+
+        if(front == -1){
+            front = rear = 0;
+        } else if(front == 0){
+            front = size - 1;
+        } else {
+            front--;
+        }
+        arr[front] = val;
+    }
+
+    void push_back(int val){
+        if((front == 0 && rear == size- 1) || (front != -1 && rear == front - 1 + size) % size){
+            cout << "Deque overflow!" << endl;
+            return;
+        } else if(rear == size - 1){
+            rear = 0;
+        } else {
+            rear++;
+        }
+
+        arr[rear] = val;
+    }
+
+    void pop_front(){
+        if(front == -1){
+            cout << "Dequeu undeflow!" << endl;
+            return;
+        } else if(front == rear){
+            front = rear = -1;
+        } else if(front == size - 1){
+            front = 0;
+        } else {
+            front++;
+        }
+    }
+
+    void pop_back(){
+        if(front == -1){
+            cout << "Deque underflow!" << endl;
+        } else if(front == rear){
+            front = rear = -1;
+        } else if(rear == 0){
+            rear = size - 1;
+        } else {
+            rear--;
+        }
+    }
+
+    bool empty(){
+        return (front == -1);
+    }
+
+    int frontElement(){
+        return (this->empty()) ? -1 : arr[front];
+    }
+
+    int backElement(){
+        return (this->empty()) ? -1 : arr[rear];
+    }
+
+    int queueSize(){
+        if(front == -1) return 0;
+        if(rear >= front){
+            return rear - front + 1;
+        } else {
+            return (size - front) + (rear + 1);
+        }
+    }
+
+    ~Dequeue(){
+        delete[] arr;
+    }
+};
+
+void DequeImplement(){
+    Dequeue d(5);
+
+    d.push_front(11);
+    cout << "Push front 11. Front: " << d.frontElement() << ", Back: " << d.backElement() << endl; 
+
+
+    d.push_back(15);
+    cout << "Push back 11. Front: " << d.frontElement() << ", Back: " << d.backElement() << endl; 
+
+    d.push_back(23);
+    d.push_front(30);
+
+      cout << "Push back 23. push Front 30. Front : " << d.frontElement() << ", Back: " << d.backElement() << endl;
+    
+      cout << "Size of deque: " << d.queueSize() << endl;
+
+       d.push_back(40);
+    cout << "Push back 40. Front: " << d.frontElement() << ", Back: " << d.backElement() << endl; 
+     cout << "Size of deque: " << d.queueSize() << endl;
+
+
+       d.push_back(50);
+    cout << "Push back 50. Front: " << d.frontElement() << ", Back: " << d.backElement() << endl; 
+     cout << "Size of deque: " << d.queueSize() << endl;
+
+     cout << endl <<"Front before pop: " << d.frontElement() << endl;
+     cout << "back before pop: " << d.backElement() << endl;
+
+            d.pop_front();
+    cout << "Pop front. Front: " << d.frontElement() << ", Back: " << d.backElement() << endl; 
+
+
+            d.pop_back();
+            d.pop_back();
+    cout << "Pop back twice. Front: " << d.frontElement() << ", Back: " << d.backElement() << endl; 
+    cout << "Size of deque: " << d.queueSize() << endl;
+
+    if(d.empty()){
+        cout << "Deque is empty!" << endl;
+    } else {
+        cout << "Deque is not empty!" << endl;
+    }
+    
+    d.pop_front();
+}
+
 int main(){
     // queueBasic();
     // manualQueue();
     // CircularQueue();
-    doublyEndedQueue();
+    // doublyEndedQueue();
+    DequeImplement();
     return 0;
 }
