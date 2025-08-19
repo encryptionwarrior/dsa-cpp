@@ -48,12 +48,51 @@ Node* buildTree(Node* root){
 
 }
 
+int getDiameter(Node* root){
+    if(root == NULL){
+        return 0;
+    }
+
+    int d1 = getDiameter(root->left);
+    int d2 = getDiameter(root->right);
+
+    int d3 = getHeight(root->left) + getHeight(root->right) + 1;
+
+    return max(d1, max(d2, d3));
+}
+
+pair<int, int> getDiameterOptimized(Node* root){
+    if(root == NULL){
+        return {0, 0};
+    }
+
+    pair<int, int> leftResult = getDiameterOptimized(root->left);
+    pair<int, int> rightResult = getDiameterOptimized(root->right);
+
+    pair<int, int> ans;
+
+    ans.second = max(leftResult.second, rightResult.second) + 1;
+
+    int opt1 = leftResult.first;
+    int opt2 = rightResult.first;
+
+    int opt3 = leftResult.second + rightResult.second + 1;
+
+    ans.first = max(opt1, max(opt2, opt3));
+
+    return ans;
+}
+
 int main(){
     Node* root = NULL;
     root = buildTree(root);
 
-    int height = getHeight(root);
+    // int height = getHeight(root);
 
-    cout << "Height / Depth of the tree is : " << height << endl;
+    // cout << "Height / Depth of the tree is : " << height << endl;
+
+    pair<int, int> DiameterResult = getDiameterOptimized(root);
+
+    cout << endl << "Diameter of the tree is : " << DiameterResult.first << endl;
     return 0;
 }
