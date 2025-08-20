@@ -83,6 +83,43 @@ pair<int, int> getDiameterOptimized(Node* root){
     return ans;
 }
 
+
+bool isBalanced(Node* root){
+    if(root == NULL){
+        return true;
+    }
+
+    bool isLeftBalanced = isBalanced(root->left);
+    bool isRightBalanced = isBalanced(root->right);
+
+    bool heightDifferenceCheck = abs(getHeight(root->left) - getHeight(root->right)) <= 1;
+
+    return isLeftBalanced && isRightBalanced && heightDifferenceCheck;
+}
+
+
+pair<bool, int> isBalancedOptimized(Node* root){
+    if(root == NULL){
+        return {true, 0};
+    }
+
+    pair<bool, int> leftResult = isBalancedOptimized(root->left);
+    pair<bool, int> rightResult = isBalancedOptimized(root->right);
+
+    bool isLeftBalanced = leftResult.first;
+    bool isRightResult = rightResult.first;
+
+    bool heightDifferencecheck = abs(leftResult.second - rightResult.second) <= 1;
+
+    pair<bool, int> ans;
+
+    ans.first = isLeftBalanced && isRightResult && heightDifferencecheck;
+    ans.second = max(leftResult.second, rightResult.second)+1;
+
+    return ans;
+}
+
+
 int main(){
     Node* root = NULL;
     root = buildTree(root);
@@ -91,8 +128,18 @@ int main(){
 
     // cout << "Height / Depth of the tree is : " << height << endl;
 
-    pair<int, int> DiameterResult = getDiameterOptimized(root);
+    // pair<int, int> DiameterResult = getDiameterOptimized(root);
 
-    cout << endl << "Diameter of the tree is : " << DiameterResult.first << endl;
+    // cout << endl << "Diameter of the tree is : " << DiameterResult.first << endl;
+
+    bool check = isBalanced(root);
+    bool checkOptimized = isBalancedOptimized(root).first;
+    
+    if(checkOptimized){
+        cout << endl << "Balanced Tree!" << endl;
+    } else {
+        cout << endl << "Not a balanced Tree!" << endl;
+    }
+    
     return 0;
 }
