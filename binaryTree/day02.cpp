@@ -138,10 +138,36 @@ pair<bool, int> isBalancedOptimized(Node* root){
 
  }
 
+ pair<bool, int> isSumTree(Node* root){
+    if(root == NULL){
+        return {true, 0};
+    }
+
+    if(root->left == NULL && root->right == NULL){
+        return {true, root->data};
+    }
+
+    pair<bool, int> LeftResult = isSumTree(root->left);
+    pair<bool, int> RightResult = isSumTree(root->right);
+
+    bool isLeftSumTree = LeftResult.first;
+    bool isRightSumTree = RightResult.first;
+
+    bool currentValueSatisfiesSum =( root->data == (LeftResult.second + RightResult.second));
+
+    pair<bool, int> ans;
+
+    ans.first = (isLeftSumTree && isRightSumTree && currentValueSatisfiesSum);
+
+    ans.second = root->data + LeftResult.second + RightResult.second;
+
+    return ans;
+ }
+
 
 int main(){
     Node* root = NULL;
-    // root = buildTree(root);
+    root = buildTree(root);
 
     // int height = getHeight(root);
 
@@ -160,22 +186,29 @@ int main(){
     //     cout << endl << "Not a balanced Tree!" << endl;
     // }
 
-    Node* root1 = NULL;
-    Node* root2 = NULL;
+//     Node* root1 = NULL;
+//     Node* root2 = NULL;
 
-    cout << "-- Buld Tree 1--" << endl;
+//     cout << "-- Buld Tree 1--" << endl;
 
-    root1 = buildTree(root1);
-    cout << "\n-- Buld Tree 1--" << endl;
+//     root1 = buildTree(root1);
+//     cout << "\n-- Buld Tree 1--" << endl;
 
-    root1 = buildTree(root2);
+//     root1 = buildTree(root2);
 
-    bool check = isIdentical(root1, root2);
+//     bool check = isIdentical(root1, root2);
+
+//   if(check){
+//         cout << endl << "Identical Tree!" << endl;
+//     } else {
+//         cout << endl << "Non-Identical Tree!" << endl;
+//     }
+    bool check = isSumTree(root).first;
 
   if(check){
-        cout << endl << "Identical Tree!" << endl;
+        cout << endl << "Sum Tree!" << endl;
     } else {
-        cout << endl << "Non-Identical Tree!" << endl;
+        cout << endl << "Non-Sum Tree!" << endl;
     }
     
     return 0;
