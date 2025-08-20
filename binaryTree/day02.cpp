@@ -119,10 +119,29 @@ pair<bool, int> isBalancedOptimized(Node* root){
     return ans;
 }
 
+ bool isIdentical(Node* root1, Node* root2){
+    if(root1 == NULL && root2 == NULL){
+        return true;
+    }
+
+    if(root1 == NULL || root2 == NULL){
+        return false;
+    }
+
+    bool isLeftIdentical = isIdentical(root1->left, root2->left);
+    bool isRightIdentical = isIdentical(root1->right, root2->right);
+
+    bool areValueSame = (root1->data == root2->data);
+
+
+    return isLeftIdentical && isRightIdentical && areValueSame;
+
+ }
+
 
 int main(){
     Node* root = NULL;
-    root = buildTree(root);
+    // root = buildTree(root);
 
     // int height = getHeight(root);
 
@@ -132,13 +151,31 @@ int main(){
 
     // cout << endl << "Diameter of the tree is : " << DiameterResult.first << endl;
 
-    bool check = isBalanced(root);
-    bool checkOptimized = isBalancedOptimized(root).first;
+    // bool check = isBalanced(root);
+    // bool checkOptimized = isBalancedOptimized(root).first;
     
-    if(checkOptimized){
-        cout << endl << "Balanced Tree!" << endl;
+    // if(checkOptimized){
+    //     cout << endl << "Balanced Tree!" << endl;
+    // } else {
+    //     cout << endl << "Not a balanced Tree!" << endl;
+    // }
+
+    Node* root1 = NULL;
+    Node* root2 = NULL;
+
+    cout << "-- Buld Tree 1--" << endl;
+
+    root1 = buildTree(root1);
+    cout << "\n-- Buld Tree 1--" << endl;
+
+    root1 = buildTree(root2);
+
+    bool check = isIdentical(root1, root2);
+
+  if(check){
+        cout << endl << "Identical Tree!" << endl;
     } else {
-        cout << endl << "Not a balanced Tree!" << endl;
+        cout << endl << "Non-Identical Tree!" << endl;
     }
     
     return 0;
