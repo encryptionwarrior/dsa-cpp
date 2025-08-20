@@ -83,14 +83,91 @@ vector<int> ZigZag(Node* root){
         return answer;
 }
 
+void traverseLeft(Node* root, vector<int> &answer){
+    if(root == NULL){
+        return;
+    }
+
+    if(root->left == NULL && root->right == NULL){
+        return;
+    }
+
+    answer.push_back(root->data);
+    
+    if(root->left){
+        traverseLeft(root->left, answer);
+    } else {
+        traverseLeft(root->right, answer);
+    }
+}
+
+void traverseLeaf(Node* root, vector<int> &answer){
+    if(root == NULL){
+        return;
+    }
+
+    if(root->left == NULL && root->right == NULL){
+        answer.push_back(root->data);
+        return;
+    }
+
+    traverseLeaf(root->left, answer);
+    traverseLeaf(root->right, answer);
+}
+
+void traverseRight(Node* root, vector<int> & answer){
+    if(root == NULL){
+        return;
+    }
+
+    if(root->left == NULL && root->right == NULL){
+        return;
+    }
+
+    if(root->right){
+        traverseRight(root->right, answer);
+    } else {
+        traverseRight(root->left, answer);
+
+    }
+
+    answer.push_back(root->data);
+}
+
+vector<int> Boundary(Node* root){
+    if(root == NULL){
+        return {};
+    }
+
+    vector<int> answer;
+
+    answer.push_back(root->data);
+    
+    traverseLeft(root->left, answer);
+    traverseLeaf(root->left, answer);
+    traverseLeaf(root->right, answer);
+    traverseRight(root->right, answer);
+
+    return answer;
+}
+
 int main(){
     Node* root = NULL;
 
     root = buildTree(root);
 
-    vector<int> result = ZigZag(root);
+    // vector<int> result = ZigZag(root);
 
-    cout << endl << "Zigzag Traversal : ";
+    // cout << endl << "Zigzag Traversal : ";
+
+    // for(int data: result){
+    //     cout << data << " ";
+    // }
+
+    // cout << endl;
+    vector<int> result = Boundary(root);
+
+    cout << endl << "Boundary Traversal : ";
 
     for(int data: result){
         cout << data << " ";
