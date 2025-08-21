@@ -1,6 +1,7 @@
 #include<iostream>
 #include<vector>
 #include<queue>
+#include<map>
 using namespace std;
 
 class Node {
@@ -151,6 +152,47 @@ vector<int> Boundary(Node* root){
     return answer;
 }
 
+
+vector<int> VerticalOrder(Node* root){
+    if(root == NULL){
+        return {};
+    }
+
+    vector<int> answer;
+
+    map<int, map<int, vector<int>>> NodeMap;
+
+    queue<pair<Node*, pair<int, int>>> Q;
+
+    Q.push(make_pair(root, make_pair(0, 0)));
+
+    while(!Q.empty()){
+        pair<Node*, pair<int, int>> temp = Q.front();
+        Q.pop();
+
+        Node* FrontNode = temp.first;
+        int HorizDist = temp.second.first;
+        int Lvl = temp.second.second;
+
+        NodeMap[HorizDist][Lvl].push_back(FrontNode->data);
+
+        if(FrontNode->left){
+            Q.push(make_pair(FrontNode->left, make_pair(HorizDist+1, Lvl+1)));
+        }
+    }
+
+    for(auto const& hd_entry: NodeMap){
+        for(auto const& level_entry: hd_entry.second){
+            for(int node_data: level_entry.second){
+                answer.push_back(node_data);
+            }
+        }
+    }
+
+    return answer;
+
+}
+
 int main(){
     Node* root = NULL;
 
@@ -165,9 +207,18 @@ int main(){
     // }
 
     // cout << endl;
-    vector<int> result = Boundary(root);
+    // vector<int> result = Boundary(root);
 
-    cout << endl << "Boundary Traversal : ";
+    // cout << endl << "Boundary Traversal : ";
+
+    // for(int data: result){
+    //     cout << data << " ";
+    // }
+
+    // cout << endl;
+    vector<int> result = VerticalOrder(root);
+
+    cout << endl << "Vertical Order Traversal : ";
 
     for(int data: result){
         cout << data << " ";
