@@ -328,6 +328,39 @@ void RightView(Node* root, vector<int>& answer, int lvl){
     RightView(root->left, answer, lvl+1);
 }
 
+vector<int> Diagonal(Node* root){
+    if(root == NULL){
+        return {};
+    }
+
+    vector<int> answer;
+
+    queue<Node*> Q;
+
+    Q.push(root);
+
+    while(!Q.empty()){
+        Node* FrontNode = Q.front();
+        Q.pop();
+
+        if(FrontNode->left){
+            Q.push(FrontNode->left);
+        }
+
+        while(FrontNode->left){
+            answer.push_back(FrontNode->data);
+            FrontNode = FrontNode->right;
+
+            if(FrontNode->left){
+                Q.push(FrontNode->left);
+            }
+        }
+        answer.push_back(FrontNode->data);
+    }
+    return answer;
+
+}
+
 int main(){
     Node* root = NULL;
 
@@ -389,12 +422,22 @@ int main(){
     // }
 
     // cout << endl;
-    vector<int> answer;
-     RightView(root, answer, 0);
+    // vector<int> answer;
+    //  RightView(root, answer, 0);
 
-    cout << endl << "Right View : ";
+    // cout << endl << "Right View : ";
 
-    for(int data: answer){
+    // for(int data: answer){
+    //     cout << data << " ";
+    // }
+
+    // cout << endl;
+    vector<int> result =  Diagonal(root);
+    
+
+    cout << endl << "Diagnol View : ";
+
+    for(int data: result){
         cout << data << " ";
     }
 
