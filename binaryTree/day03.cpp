@@ -301,6 +301,19 @@ vector<int> BottomView(Node* root){
     return answer;
 }
 
+void LeftView(Node* root, vector<int>& answer, int lvl){
+    if(root == NULL){
+        return;
+    }
+
+    if(lvl == answer.size()){
+        answer.push_back(root->data);
+    }
+
+    LeftView(root->left, answer, lvl+1);
+    LeftView(root->right, answer, lvl+1);
+}
+
 int main(){
     Node* root = NULL;
 
@@ -343,11 +356,21 @@ int main(){
     // }
 
     // cout << endl;
-    vector<int> result = BottomView(root);
+    // vector<int> result = BottomView(root);
 
-    cout << endl << "Bottom View : ";
+    // cout << endl << "Bottom View : ";
 
-    for(int data: result){
+    // for(int data: result){
+    //     cout << data << " ";
+    // }
+
+    // cout << endl;
+    vector<int> answer;
+     LeftView(root, answer, 0);
+
+    cout << endl << "Left View : ";
+
+    for(int data: answer){
         cout << data << " ";
     }
 
