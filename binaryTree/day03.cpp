@@ -264,6 +264,43 @@ vector<int> TopView2(Node* root){
 
 }
 
+vector<int> BottomView(Node* root){
+    if(root == NULL){
+        return {};
+    }
+
+    vector<int> answer;
+
+    map<int, int> BottomNode;
+
+    queue<pair<Node*, int>> Q;
+
+    Q.push(make_pair(root, 0));
+
+    while(!Q.empty()){
+        pair<Node*, int> temp = Q.front();
+        Q.pop();
+
+        Node* FrontNode = temp.first;
+        int HorizDist = temp.second;
+
+        BottomNode[HorizDist] = FrontNode->data;
+
+        if(FrontNode->left){
+            Q.push(make_pair(FrontNode->left, HorizDist - 1));
+        }
+        if(FrontNode->right){
+            Q.push(make_pair(FrontNode->right, HorizDist + 1));
+        }
+    }
+
+    for(auto const& entry: BottomNode){
+        answer.push_back(entry.second);
+    }
+
+    return answer;
+}
+
 int main(){
     Node* root = NULL;
 
@@ -297,9 +334,18 @@ int main(){
 
     // cout << endl;
     // vector<int> result = TopView(root);
-    vector<int> result = TopView2(root);
+    // vector<int> result = TopView2(root);
 
-    cout << endl << "Top View : ";
+    // cout << endl << "Top View : ";
+
+    // for(int data: result){
+    //     cout << data << " ";
+    // }
+
+    // cout << endl;
+    vector<int> result = BottomView(root);
+
+    cout << endl << "Bottom View : ";
 
     for(int data: result){
         cout << data << " ";
