@@ -193,6 +193,77 @@ vector<int> VerticalOrder(Node* root){
 
 }
 
+void TraverseLeft(Node* root, vector<int>& answer){
+    if(root == NULL){
+        return;
+    }
+
+    TraverseLeft(root->left, answer);
+    answer.push_back(root->data);
+}
+void TraverseRight(Node* root, vector<int>& answer){
+    if(root == NULL){
+        return;
+    }
+
+    answer.push_back(root->data);
+    TraverseRight(root->right, answer);
+}
+
+vector<int> TopView(Node* root){
+    if(root == NULL){
+        return {};
+    }
+
+    vector<int> answer;
+
+    TraverseLeft(root->left, answer);
+    answer.push_back(root->data);
+    TraverseRight(root->right, answer);
+
+    return answer;
+}
+
+vector<int> TopView2(Node* root){
+    if(root == NULL){
+        return {};
+    }
+
+    vector<int> answer;
+
+    map<int, int> TopNode;
+
+    queue<pair<Node*, int>> Q;
+
+    Q.push(make_pair(root, 0));
+
+    while(!Q.empty()){
+        pair<Node*, int> temp = Q.front();
+        Q.pop();
+
+        Node* FrontNode = temp.first;
+        int HorizDist = temp.second;
+
+        if(TopNode.find(HorizDist) == TopNode.end()){
+            TopNode[HorizDist] = FrontNode->data;
+        }
+
+        if(FrontNode->left){
+            Q.push(make_pair(FrontNode->left, HorizDist - 1));
+        }
+        if(FrontNode->right){
+            Q.push(make_pair(FrontNode->right, HorizDist + 1));
+        }
+    }
+
+    for(auto const& entry: TopNode){
+        answer.push_back(entry.second);
+    }
+
+    return answer;
+
+}
+
 int main(){
     Node* root = NULL;
 
@@ -216,9 +287,19 @@ int main(){
     // }
 
     // cout << endl;
-    vector<int> result = VerticalOrder(root);
+    // vector<int> result = VerticalOrder(root);
 
-    cout << endl << "Vertical Order Traversal : ";
+    // cout << endl << "Vertical Order Traversal : ";
+
+    // for(int data: result){
+    //     cout << data << " ";
+    // }
+
+    // cout << endl;
+    // vector<int> result = TopView(root);
+    vector<int> result = TopView2(root);
+
+    cout << endl << "Top View : ";
 
     for(int data: result){
         cout << data << " ";
