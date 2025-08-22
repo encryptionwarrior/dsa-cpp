@@ -60,7 +60,7 @@ void levelOrderTraversal(Node* root){
             cout << endl;
 
             if(!Q.empty()){
-                return Q.push(NULL);
+                Q.push(NULL);
             }
         } else {
             cout << FrontNode->data << " ";
@@ -151,6 +151,48 @@ int maxVal(Node* root){
     return temp->data;
 }
 
+Node* DeletionInBST(Node* root, int data){
+    if(root == NULL){
+        return NULL;
+    }
+
+    if(root->data == data){
+        if(root->left == NULL && root->right == NULL){
+            delete root;
+            return NULL;
+        }
+
+        if(root->left != NULL && root->right == NULL){
+            Node* temp = root->left;
+            delete root;
+            return temp;
+        }
+        if(root->left == NULL && root->right != NULL){
+            Node* temp = root->right;
+            delete root;
+            return temp;
+        }
+
+        if(root->left != NULL && root->right != NULL){
+            int successor_val = minVal(root->right);
+
+            root->data = successor_val;
+            root->right = DeletionInBST(root->right, successor_val);
+            return root;
+        }
+
+    } else if(data > root->data){
+        root->right = DeletionInBST(root->right, data);
+        return root;
+    } else {
+        root->left = DeletionInBST(root->left, data);
+        return root;
+
+    }
+
+    return root;
+}
+
 
 int main(){
 
@@ -186,9 +228,21 @@ int main(){
     //     cout << "Key " << key << " is absent in BST!" << endl;
     // }
 
-    cout << "Minimun value : " <<  minVal(root) << endl;
-    cout << "Maximum value : " <<  maxVal(root) << endl;
+    // cout << "Minimun value : " <<  minVal(root) << endl;
+    // cout << "Maximum value : " <<  maxVal(root) << endl;
     
+    int key_to_delete;
+
+    cout << endl << "Before Deletion (Level Order Traversal) : " << endl;
+    levelOrderTraversal(root);
+
+    cout << endl << "Enter the key to delete : ";
+    cin >> key_to_delete;
+
+    root = DeletionInBST(root, key_to_delete);
+
+       cout << endl << "After Deletion (Level Order Traversal) : " << endl;
+    levelOrderTraversal(root);
 
     cout << endl;
 
