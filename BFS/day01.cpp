@@ -123,6 +123,34 @@ bool searchBST(Node* root, int key){
     }
 }
 
+int minVal(Node* root){
+    if(root == NULL){
+        return -1;
+    }
+
+    Node* temp = root;
+
+    while(temp->left != NULL){
+        temp = temp->left;
+    }
+
+    return temp->data;
+}
+
+int maxVal(Node* root){
+    if(root == NULL){
+        return -1;
+    }
+
+    Node* temp = root;
+
+    while(temp->right != NULL){
+        temp = temp->right;
+    }
+
+    return temp->data;
+}
+
 
 int main(){
 
@@ -145,18 +173,21 @@ int main(){
     // cout << endl << "post order Traversal : " << endl;
     // postOrderRecursive(root);
 
-    int key;
+    // int key;
 
-    cout << "Enter the key to search: ";
-    cin >> key;
+    // cout << "Enter the key to search: ";
+    // cin >> key;
 
-    bool found = searchBST(root, key);
+    // bool found = searchBST(root, key);
 
-    if(found){
-        cout << "Key " << key << " is present in BST!" << endl;
-    } else {
-        cout << "Key " << key << " is absent in BST!" << endl;
-    }
+    // if(found){
+    //     cout << "Key " << key << " is present in BST!" << endl;
+    // } else {
+    //     cout << "Key " << key << " is absent in BST!" << endl;
+    // }
+
+    cout << "Minimun value : " <<  minVal(root) << endl;
+    cout << "Maximum value : " <<  maxVal(root) << endl;
     
 
     cout << endl;
