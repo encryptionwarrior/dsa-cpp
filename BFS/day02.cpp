@@ -116,6 +116,27 @@ int kthSmallest(Node* root, int &index, int k){
 
 }
 
+int kthLargest(Node* root, int &index, int k){
+    if(root == NULL){
+        return -1;
+    }
+
+    int rightResult = kthLargest(root->right, index, k);
+
+    if(rightResult != -1){
+        return rightResult;
+    }
+
+    index++;
+
+    if(index == k){
+        return root->data;
+    }
+
+    return kthLargest(root->left, index, k);
+
+}
+
 int main(){
 
     Node* root = NULL;
@@ -148,12 +169,18 @@ int main(){
 
     int index = 0;
 
-    ans = kthSmallest(root, index, k);
+    // ans = kthSmallest(root, index, k);
+    ans = kthLargest(root, index, k);
 
+    // if(ans != -1){
+    //     cout << endl << "The " << k << "th smallest element is = " << ans << endl;
+    // } else { 
+    //     cout << "Could not find the " << k << "th smalles element(K might be too large or tree empty) " << endl;
+    // }
     if(ans != -1){
-        cout << endl << "The " << k << "th smallest element is = " << ans << endl;
+        cout << endl << "The " << k << "th largest element is = " << ans << endl;
     } else { 
-        cout << "Could not find the " << k << "th smalles element(K might be too large or tree empty) " << endl;
+        cout << "Could not find the " << k << "th largest element(K might be too large or tree empty) " << endl;
     }
 
     return 0;
