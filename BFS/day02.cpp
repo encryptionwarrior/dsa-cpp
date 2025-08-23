@@ -137,6 +137,43 @@ int kthLargest(Node* root, int &index, int k){
 
 }
 
+pair<int, int> predecessorSuccessor(Node* root, int key){
+    int pred = -1;
+    int succ = -1;
+
+    Node* keyNode = root;
+
+    while(keyNode != NULL && keyNode->data != key){
+        if(keyNode->data > key){
+            succ = keyNode->data;
+            keyNode = keyNode->left;
+        } else {
+            pred = keyNode->data;
+            keyNode = keyNode->right;
+        }
+    }
+
+    if(keyNode == NULL){
+        return {pred, succ};
+    }
+
+    Node* leftTree = keyNode->left;
+
+    while(leftTree != NULL){
+        pred = leftTree->data;
+        leftTree = leftTree->right;
+    }
+
+    Node* rightTree = keyNode->right;
+
+    while(rightTree != NULL){
+        succ = rightTree->data;
+        rightTree = rightTree->left;
+    }
+
+    return {pred, succ};
+}
+
 int main(){
 
     Node* root = NULL;
@@ -157,31 +194,47 @@ int main(){
     // }
 
 
-    int k, ans;
+    // int k, ans;
 
-    cout << "Enter the value of K (eg: 1, for smallest, 2 for second smallest): ";
+    // cout << "Enter the value of K (eg: 1, for smallest, 2 for second smallest): ";
 
-    cin >> k;
+    // cin >> k;
 
-    cout << endl << "Level order Traversal of the created tree : " << endl;
+    // cout << endl << "Level order Traversal of the created tree : " << endl;
 
-    levelOrderTraversal(root);
+    // levelOrderTraversal(root);
 
-    int index = 0;
+    // int index = 0;
 
-    // ans = kthSmallest(root, index, k);
-    ans = kthLargest(root, index, k);
+    // // ans = kthSmallest(root, index, k);
+    // ans = kthLargest(root, index, k);
 
     // if(ans != -1){
     //     cout << endl << "The " << k << "th smallest element is = " << ans << endl;
     // } else { 
     //     cout << "Could not find the " << k << "th smalles element(K might be too large or tree empty) " << endl;
     // }
-    if(ans != -1){
-        cout << endl << "The " << k << "th largest element is = " << ans << endl;
-    } else { 
-        cout << "Could not find the " << k << "th largest element(K might be too large or tree empty) " << endl;
-    }
+    // if(ans != -1){
+    //     cout << endl << "The " << k << "th largest element is = " << ans << endl;
+    // } else { 
+    //     cout << "Could not find the " << k << "th largest element(K might be too large or tree empty) " << endl;
+    // }
+
+    int key;
+
+    cout << "Enter the value of key element : ";
+    cin >> key;
+
+    cout << endl;
+
+    cout << endl << "Level Order Traversal : " << endl;
+    levelOrderTraversal(root);
+
+    pair<int, int> ans = predecessorSuccessor(root, key);
+
+    cout << "Predecessor : " << ans.first << endl;
+    cout << "Successor : " << ans.second << endl;
+
 
     return 0;
 }
