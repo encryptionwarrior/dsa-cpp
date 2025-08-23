@@ -174,6 +174,27 @@ pair<int, int> predecessorSuccessor(Node* root, int key){
     return {pred, succ};
 }
 
+Node* searchNode(Node* root, int key){
+    if(root == NULL || root->data == key) return root;
+
+    if(key < root->data) return searchNode(root->left, key);
+    return searchNode(root->right, key);
+}
+
+Node* LCAinBST(Node* root, Node* P, Node* Q){
+    while(root != NULL){
+        if(root->data < P->data && root->data < Q->data){
+            root = root->right;
+        } else if(root->data > P->data && root->data > Q->data){
+            root = root->left;
+        } else {
+            root;
+        }
+    }
+
+    return NULL;
+}
+
 int main(){
 
     Node* root = NULL;
@@ -220,21 +241,43 @@ int main(){
     //     cout << "Could not find the " << k << "th largest element(K might be too large or tree empty) " << endl;
     // }
 
-    int key;
+    // int key;
 
-    cout << "Enter the value of key element : ";
-    cin >> key;
+    // cout << "Enter the value of key element : ";
+    // cin >> key;
+
+    // cout << endl;
+
+    // cout << endl << "Level Order Traversal : " << endl;
+    // levelOrderTraversal(root);
+
+    // pair<int, int> ans = predecessorSuccessor(root, key);
+
+    // cout << "Predecessor : " << ans.first << endl;
+    // cout << "Successor : " << ans.second << endl;
+int d1, d2;
+     cout << "Enter the two node values (d1, d2) : ";
+    cin >> d1 >> d2;
 
     cout << endl;
 
     cout << endl << "Level Order Traversal : " << endl;
     levelOrderTraversal(root);
 
-    pair<int, int> ans = predecessorSuccessor(root, key);
+    Node* P = searchNode(root, d1);
+    Node* Q = searchNode(root, d2);
 
-    cout << "Predecessor : " << ans.first << endl;
-    cout << "Successor : " << ans.second << endl;
+    if(P == NULL || Q == NULL){
+        cout << "One or both nodes not found in the BST." << endl;
+        return 1;
+    }
 
+    Node* AnsNode = LCAinBST(root, P, Q);
+
+    if(AnsNode != NULL){
+        cout << "Lowest common ancestor of " << P->data << " & " << Q->data << " is : ";
+        cout << AnsNode->data << endl;
+    }
 
     return 0;
 }
