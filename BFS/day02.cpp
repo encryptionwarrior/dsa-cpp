@@ -95,6 +95,27 @@ bool ValidateBST(Node* root, int min, int max){
     return false;
 }
 
+int kthSmallest(Node* root, int &index, int k){
+    if(root == NULL){
+        return -1;
+    }
+
+    int leftResult = kthSmallest(root->left, index, k);
+
+    if(leftResult != -1){
+        return leftResult;
+    }
+
+    index++;
+
+    if(index == k){
+        return root->data;
+    }
+
+    return kthSmallest(root->right, index, k);
+
+}
+
 int main(){
 
     Node* root = NULL;
@@ -103,15 +124,36 @@ int main(){
 
     takeInput(root);
 
-    cout << endl << "Level order Traversal of the created tree : " << endl;
+    // cout << endl << "Level order Traversal of the created tree : " << endl;
     
+
+    // levelOrderTraversal(root);
+
+    // if(ValidateBST(root, INT_MIN, INT_MAX)){
+    //     cout << "YES ! It is a Binary search tree." << endl;
+    // } else { 
+    //     cout << "NO ! It is not a binary search tree." << endl;
+    // }
+
+
+    int k, ans;
+
+    cout << "Enter the value of K (eg: 1, for smallest, 2 for second smallest): ";
+
+    cin >> k;
+
+    cout << endl << "Level order Traversal of the created tree : " << endl;
 
     levelOrderTraversal(root);
 
-    if(ValidateBST(root, INT_MIN, INT_MAX)){
-        cout << "YES ! It is a Binary search tree." << endl;
+    int index = 0;
+
+    ans = kthSmallest(root, index, k);
+
+    if(ans != -1){
+        cout << endl << "The " << k << "th smallest element is = " << ans << endl;
     } else { 
-        cout << "NO ! It is not a binary search tree." << endl;
+        cout << "Could not find the " << k << "th smalles element(K might be too large or tree empty) " << endl;
     }
 
     return 0;
