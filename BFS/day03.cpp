@@ -118,6 +118,37 @@ bool checktwoSum(Node* root, int target){
 }
 
 
+void inOrderNode(Node* root, vector<Node*>& ans){
+    if(root == NULL){
+        return;
+    }
+
+    inOrderNode(root->left, ans);
+    ans.push_back(root);
+    inOrderNode(root->right, ans);
+}
+
+void flattenBST(Node* &root){
+    if(root == NULL){
+        return;
+    }
+
+    vector<Node*> arr;
+    inOrderNode(root, arr);
+
+    for(int i = 0; i < arr.size() - 1; i++){
+        arr[i] ->left = NULL;
+        arr[i]->right = arr[i+1];
+
+        arr[arr.size()-1]->left = NULL;
+        arr[arr.size()-1]->right = NULL;
+
+        root = arr[0];
+    }
+
+}
+
+
 int main(){
 
     Node* root = NULL;
@@ -132,13 +163,26 @@ int main(){
     cout << endl << "Level Order Traversal : " << endl;
     levelOrderTraversal(root);
 
-    bool isSumPresent = checktwoSum(root, target);
+    // bool isSumPresent = checktwoSum(root, target);
 
-    if(isSumPresent){
-        cout << "Sum pair is present in BST!" << endl;
-    } else {
-        cout << "Sum pair is not present in BST!" << endl;
+    // if(isSumPresent){
+    //     cout << "Sum pair is present in BST!" << endl;
+    // } else {
+    //     cout << "Sum pair is not present in BST!" << endl;
+    // }
+    flattenBST(root);
+
+    Node* temp = root;
+    cout << endl << "Flattened BST (traverse using right pointers) : ";
+
+    while(temp != NULL){
+        cout << temp->data << " ";
+        temp = temp->right;
     }
+
+    cout << endl;
+
+
 
     return 0;
 }
