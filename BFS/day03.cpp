@@ -149,6 +149,34 @@ void flattenBST(Node* &root){
 }
 
 
+Node* balancedBSt(vector<int>& arr, int start, int end){
+    if(start > end){
+        return NULL;
+    }
+
+    int mid = start + (end - start)/2;
+
+    Node* temp = new Node(arr[mid]);
+
+    temp->left = balancedBSt(arr, start, mid - 1);
+    temp->right = balancedBSt(arr, mid + 1, end);
+
+
+    return temp;
+}
+
+Node* NormalBalance(Node* &root){
+    if(root == NULL){
+        return NULL;
+    }
+
+    vector<int> arr;
+    inOrder(root, arr);
+    Node* newBSTroot = balancedBSt(arr, 0, arr.size() - 1);
+
+    return newBSTroot;
+}
+
 int main(){
 
     Node* root = NULL;
@@ -170,16 +198,21 @@ int main(){
     // } else {
     //     cout << "Sum pair is not present in BST!" << endl;
     // }
-    flattenBST(root);
+    // flattenBST(root);
 
-    Node* temp = root;
-    cout << endl << "Flattened BST (traverse using right pointers) : ";
+    // Node* temp = root;
+    // cout << endl << "Flattened BST (traverse using right pointers) : ";
 
-    while(temp != NULL){
-        cout << temp->data << " ";
-        temp = temp->right;
-    }
+    // while(temp != NULL){
+    //     cout << temp->data << " ";
+    //     temp = temp->right;
+    // }
 
+    Node* newRoot = NormalBalance(root);
+
+    cout << endl << "Level Order Traversal of Balanced BSt : " << endl;
+    levelOrderTraversal(newRoot);
+    
     cout << endl;
 
 
