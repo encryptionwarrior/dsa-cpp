@@ -1,5 +1,6 @@
 #include<iostream>
 #include<queue>
+#include<limits.h>
 using namespace std;
 
 class Node{
@@ -177,19 +178,41 @@ Node* NormalBalance(Node* &root){
     return newBSTroot;
 }
 
+Node* createPreOrder(vector<int> &preOrder, int &index, int min, int max){
+    if(index >= preOrder.size()){
+        return NULL;
+    }
+
+    int data = preOrder[index];
+
+    if(data < min || data > max){
+        return NULL;
+    }
+
+    Node* temp = new Node(data);
+    index++;
+
+    temp->left = createPreOrder(preOrder, index, min, data);
+
+    temp->right = createPreOrder(preOrder, index, data, max);
+
+    return temp;
+
+}
+
 int main(){
 
     Node* root = NULL;
-    int target;
+    // int target;
 
-    cout << "Enter data to create BST : ";
-    takeInput(root);
+    // cout << "Enter data to create BST : ";
+    // takeInput(root);
 
-    cout << "Enter the target value : ";
-    cin >> target;
+    // cout << "Enter the target value : ";
+    // cin >> target;
 
-    cout << endl << "Level Order Traversal : " << endl;
-    levelOrderTraversal(root);
+    // cout << endl << "Level Order Traversal : " << endl;
+    // levelOrderTraversal(root);
 
     // bool isSumPresent = checktwoSum(root, target);
 
@@ -208,14 +231,28 @@ int main(){
     //     temp = temp->right;
     // }
 
-    Node* newRoot = NormalBalance(root);
+    // Node* newRoot = NormalBalance(root);
 
-    cout << endl << "Level Order Traversal of Balanced BSt : " << endl;
-    levelOrderTraversal(newRoot);
+    // cout << endl << "Level Order Traversal of Balanced BSt : " << endl;
+    // levelOrderTraversal(newRoot);
     
-    cout << endl;
+    // cout << endl;
+
+    vector<int> preOrder;
+    int index = 0;
+
+    cout << "Enter elements of traversal (-1 to stop) : ";
+    int val;
+
+    while(cin >> val && val != -1){
+        preOrder.push_back(val);
+    }
+
+    root = createPreOrder(preOrder, index, INT_MIN, INT_MAX);
 
 
+    cout << endl << "Level order Traversal of constructed BST : " << endl;
+    levelOrderTraversal(root);
 
     return 0;
 }
