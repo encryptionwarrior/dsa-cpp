@@ -1,6 +1,7 @@
 #include<iostream>
 #include<vector>
 #include<queue>
+#include<limits.h>
 using namespace std;
 
 class Node{
@@ -259,30 +260,118 @@ Node* MergeBST2(Node* root1, Node* root2){
     return result;
 }
 
+class Info{
+    public:
+        int maxi;
+        int mini;
+        int isBST;
+        int size;
+
+        Info(){
+            this->maxi = INT_MIN;
+            this->mini = INT_MAX;
+            this->isBST = true;
+            this->size = 0;
+        }
+        Info(int min, int max, bool isBST, int size){
+            this->maxi = max;
+            this->mini = min;
+            this->isBST = isBST;
+            this->size = size;
+        }
+};
+
+Info* MaxBST(Node* root, int &answer){
+    if(root == NULL){
+        Info* temp = new Info();
+        return temp;
+    }
+
+    Info* left = MaxBST(root->left, answer);
+    Info* right = MaxBST(root->right, answer);
+
+    Info* currNode = new Info();
+
+    currNode->size = left->size + right->size + 1;
+    currNode->maxi = max(root->data, right->maxi);
+    currNode->mini = max(root->data, right->mini);
+
+    if(left->isBST && right->isBST && (root->data > left->maxi) && (root->data < right->mini)){
+        currNode->isBST = true;
+    } else {
+        currNode->isBST = false;
+    }
+
+    if(currNode->isBST){
+        answer = max(answer, currNode->size);
+    }
+
+    return currNode;
+
+}
+
+Node* buildTree(Node* root){
+    int data;
+    cout << "Enter the data (-1 for NULL) : ";
+    cin >> data;
+
+    if(data == -1){
+        return NULL;
+    }
+
+    root = new Node(data);
+
+    cout << "Enter the LEFT Child of " << data << " : ";
+    root->left = buildTree(root->left);
+
+
+    cout << "Enter the RIGHT Child of " << data << " : ";
+    root->right = buildTree(root->right);
+
+    return root;
+
+}
+
+
+
 int main(){
 
-    Node* root1 = NULL;
-    Node* root2 = NULL;
+    // Node* root1 = NULL;
+    // Node* root2 = NULL;
 
-    cout << "Enter data to create BST 1 (e.g. 50, 40, 60 , 70, -1) : ";
-    takeInput(root1);
-    cout << "Enter data to create BST 1 (e.g. 55, 45, 35 , 65, 47, -1) : ";
-    takeInput(root2);
+    // cout << "Enter data to create BST 1 (e.g. 50, 40, 60 , 70, -1) : ";
+    // takeInput(root1);
+    // cout << "Enter data to create BST 1 (e.g. 55, 45, 35 , 65, 47, -1) : ";
+    // takeInput(root2);
 
-    cout << endl << "Level order Traversal of BST 1 : "<< endl;
-    levelOrderTraversal(root1);
+    // cout << endl << "Level order Traversal of BST 1 : "<< endl;
+    // levelOrderTraversal(root1);
 
-    cout << endl << "Level order Traversal of BST 2 : "<< endl;
-    levelOrderTraversal(root2);
+    // cout << endl << "Level order Traversal of BST 2 : "<< endl;
+    // levelOrderTraversal(root2);
 
     // Node* result = MergeBST(root1, root2);
 
     // cout << "Level order Traversal of final merged BST (from main) : " << endl;
     // levelOrderTraversal(result);
-    Node* result = MergeBST2(root1, root2);
+    // Node* result = MergeBST2(root1, root2);
 
-    cout << "Level order Traversal of final merged BST (from main) : " << endl;
-    levelOrderTraversal(result);
+    // cout << "Level order Traversal of final merged BST (from main) : " << endl;
+    // levelOrderTraversal(result);
+
+    Node* root = NULL;
+    cout << "Enter data to create a tree (use -1 for NULL children) : ";
+
+    root = buildTree(root);
+
+
+    int answer = 0;
+
+    Info* solve = MaxBST(root, answer);
+
+    cout << endl << "Size of the largest BST in the given Binary Tree : " << answer << endl;
+
+
 
     return 0;
 }
