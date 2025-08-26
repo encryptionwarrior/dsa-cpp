@@ -116,6 +116,15 @@ vector<int> buildMinHeap(vector<int>& arr){
     return arr;
 }
 
+void heapSort(int arr[], int size){
+    while(size > 1){
+        swap(arr[1], arr[size]);
+        size--;
+
+        heapify(arr, size, 1);
+    }
+}
+
 int main(){
 
     // Heap h;
@@ -158,18 +167,39 @@ int main(){
 
     // cout << endl;
 
-    vector<int> arr = {90, 30, 20, 120, 50, 60, 40, 150};
+    // vector<int> arr = {90, 30, 20, 120, 50, 60, 40, 150};
+
+    // cout << "Before building Min Heap : ";
+    // for(int i = 0; i < arr.size(); i++){
+    //     cout << arr[i] << " ";
+    // }
+    // cout << endl;
+
+    // arr = buildMinHeap(arr);
+
+    //    cout << "After building Min Heap : ";
+    // for(int i = 0; i < arr.size(); i++){
+    //     cout << arr[i] << " ";
+    // }
+    // cout << endl;
+    int arr[6] = {-1, 54, 53, 55, 50, 52};
+    int size = 5;
 
     cout << "Before building Min Heap : ";
-    for(int i = 0; i < arr.size(); i++){
+    for(int i = size/2; i > 0; i--){
+      heapify(arr, size, 1);
+    }
+
+      cout << "Unsroted Array after max heap creation : ";
+    for(int i = 0; i < size; i++){
         cout << arr[i] << " ";
     }
     cout << endl;
 
-    arr = buildMinHeap(arr);
+    heapSort(arr, size);
 
-       cout << "After building Min Heap : ";
-    for(int i = 0; i < arr.size(); i++){
+       cout << "Sorted array (Heap Sort) : ";
+    for(int i = 0; i < size; i++){
         cout << arr[i] << " ";
     }
     cout << endl;
