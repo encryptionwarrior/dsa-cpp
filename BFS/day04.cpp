@@ -151,6 +151,113 @@ Node* MergeBST(Node* root1, Node* root2){
     return answer;
 }
 
+void flattenBST(Node* root, Node* &head){
+    if(root == NULL){
+        return;
+    }
+
+    flattenBST(root->right, head);
+
+    root->right = head;
+
+    if(head != NULL){
+        head->left = root;
+    }
+
+    head = root;
+
+    flattenBST(root->left, head);
+}
+
+Node* mergeLinkedhead(Node* head1, Node* head2){
+    Node* head = NULL;
+    Node* tail = NULL;
+
+    while(head1 != NULL && head2 != NULL){
+        if(head1->data < head2->data){
+            if(head == NULL){
+                head = tail = head1;
+            } else {
+                tail->right = head1;
+                tail->left = tail;
+                tail = head1;
+            }
+            head1 = head1->right;
+        } else {
+            if(head == NULL){
+                head = tail = head2;
+            } else {
+                tail->right = head2;
+                tail->left = tail;
+                tail = head2;
+            }
+            head2 = head2->right;
+        }
+    }
+
+    while(head1 != NULL){
+        tail->right = head1;
+        tail->left = tail;
+        tail = head;
+        head1 = head1->right;
+    }
+
+    while(head2 != NULL){
+        tail->right = head2;
+        head2->left = tail;
+        tail = head2;
+        head2 = head2->right;
+    }
+
+    return head;
+}
+
+int countNodes(Node* head){
+    int cnt = 0;
+    Node* temp = head;
+    while(temp != NULL){
+        cnt++;
+        temp = temp->right;
+    }
+    return cnt;
+}
+
+Node* LL_2_BST(Node* &head, int n){
+    if(n <= 0 || head == NULL){
+        return NULL;
+    }
+
+    Node* leftChild = LL_2_BST(head, n/2);
+
+    Node* root = head;
+    root->left = leftChild;
+
+    head = head->right;
+
+    root->right = LL_2_BST(head, n - n/2 - 1);
+
+    return root;
+}
+
+
+Node* MergeBST2(Node* root1, Node* root2){
+    Node* head1 = NULL;
+    Node* head2 = NULL;
+
+    flattenBST(root1, head1);
+    flattenBST(root2, head2);
+
+    if(head1 != NULL) head1->left = NULL;
+    if(head1 != NULL) head2->left = NULL;
+
+    Node* mergeListHead = mergeLinkedhead(head1, head2);
+
+    int totalNodes = countNodes(mergeListHead);
+
+    Node* result = LL_2_BST(mergeListHead, totalNodes);
+
+    return result;
+}
 
 int main(){
 
@@ -168,7 +275,11 @@ int main(){
     cout << endl << "Level order Traversal of BST 2 : "<< endl;
     levelOrderTraversal(root2);
 
-    Node* result = MergeBST(root1, root2);
+    // Node* result = MergeBST(root1, root2);
+
+    // cout << "Level order Traversal of final merged BST (from main) : " << endl;
+    // levelOrderTraversal(result);
+    Node* result = MergeBST2(root1, root2);
 
     cout << "Level order Traversal of final merged BST (from main) : " << endl;
     levelOrderTraversal(result);
