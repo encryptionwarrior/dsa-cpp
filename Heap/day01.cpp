@@ -1,5 +1,6 @@
 #include<iostream>
 #include<vector>
+#include<queue>
 using namespace std;
 
 class Heap {
@@ -125,6 +126,77 @@ void heapSort(int arr[], int size){
     }
 }
 
+void maxHeapPriorityQueue(){
+    priority_queue<int> maxHeap;
+
+    maxHeap.push(52);
+    maxHeap.push(50);
+    maxHeap.push(54);
+    maxHeap.push(40);
+    maxHeap.push(35);
+    maxHeap.push(65);
+
+    cout << "Top element : " << maxHeap.top() << endl;
+
+    maxHeap.pop();
+    cout << "Top element : " << maxHeap.top() << endl;
+    
+    maxHeap.pop();
+    maxHeap.pop();
+    cout << "Top element : " << maxHeap.top() << endl;
+
+    if(maxHeap.empty()){
+        cout << "Max heap is empty!" << endl;
+    } else {
+        cout << "Max heap is not empty! current size:" << maxHeap.size() << endl;
+    }
+
+    maxHeap.pop();
+    maxHeap.pop();
+    maxHeap.pop();
+ 
+    if(maxHeap.empty()){
+        cout << "Max heap is now empty after popping all elements !" << endl;
+    }
+
+};
+
+
+void minHeapPriorityQueue(){
+    priority_queue<int, vector<int>, greater<int>> minHeap;
+
+    minHeap.push(52);
+    minHeap.push(50);
+    minHeap.push(54);
+    minHeap.push(40);
+    minHeap.push(35);
+    minHeap.push(65);
+
+    cout << "Top element : " << minHeap.top() << endl;
+
+    minHeap.pop();
+    cout << "Top element : " << minHeap.top() << endl;
+    
+    minHeap.pop();
+    minHeap.pop();
+    cout << "Top element : " << minHeap.top() << endl;
+
+    if(minHeap.empty()){
+        cout << "Min heap is empty!" << endl;
+    } else {
+        cout << "Min heap is not empty! current size:" << minHeap.size() << endl;
+    }
+
+    minHeap.pop();
+    minHeap.pop();
+    minHeap.pop();
+ 
+    if(minHeap.empty()){
+        cout << "Min heap is now empty after popping all elements !" << endl;
+    }
+
+};
+
 int main(){
 
     // Heap h;
@@ -182,27 +254,30 @@ int main(){
     //     cout << arr[i] << " ";
     // }
     // cout << endl;
-    int arr[6] = {-1, 54, 53, 55, 50, 52};
-    int size = 5;
+    // int arr[6] = {-1, 54, 53, 55, 50, 52};
+    // int size = 5;
 
-    cout << "Before building Min Heap : ";
-    for(int i = size/2; i > 0; i--){
-      heapify(arr, size, 1);
-    }
+    // cout << "Before building Min Heap : ";
+    // for(int i = size/2; i > 0; i--){
+    //   heapify(arr, size, 1);
+    // }
 
-      cout << "Unsroted Array after max heap creation : ";
-    for(int i = 0; i < size; i++){
-        cout << arr[i] << " ";
-    }
-    cout << endl;
+    //   cout << "Unsroted Array after max heap creation : ";
+    // for(int i = 0; i < size; i++){
+    //     cout << arr[i] << " ";
+    // }
+    // cout << endl;
 
-    heapSort(arr, size);
+    // heapSort(arr, size);
 
-       cout << "Sorted array (Heap Sort) : ";
-    for(int i = 0; i < size; i++){
-        cout << arr[i] << " ";
-    }
-    cout << endl;
+    //    cout << "Sorted array (Heap Sort) : ";
+    // for(int i = 0; i < size; i++){
+    //     cout << arr[i] << " ";
+    // }
+    // cout << endl;
+
+    maxHeapPriorityQueue();
+    minHeapPriorityQueue();
 
     return 0;
 }
