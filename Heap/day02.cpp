@@ -314,13 +314,128 @@ void minimumCostRope(){
     cout << "mimimum cost to join all ropes = " << cost << endl;
 }
 
+
+Node* insertIntoBST(Node* root, int data){
+    if(root == NULL){
+        root = new Node(data);
+        return root;
+    }
+
+    if(data > root->data){
+        root->right = insertIntoBST(root->right, data);
+    } else {
+        root->left = insertIntoBST(root->left, data);
+    }
+
+    return root;
+
+}
+
+
+void takeInput(Node* &root){
+    int data;
+    cout << "Enter data for node (enter -1 to stop): ";
+    cin >> data;
+
+    while(data != -1){
+        root = insertIntoBST(root, data);
+        cout << "Enter data for node (enter -1 to stop): ";
+        cin >> data;
+    }
+}
+
+void levelOrderTraversal(Node* root){
+    if(root == NULL){
+        return;
+    }
+
+    queue<Node*> Q;
+    Q.push(root);
+    Q.push(NULL);
+
+    while(!Q.empty()){
+        Node* FrontNode = Q.front();
+        Q.pop();
+
+        if(FrontNode == NULL){
+            cout << endl;
+
+            if(!Q.empty()){
+                Q.push(NULL);
+            }
+        } else {
+            cout << FrontNode->data << " ";
+            
+
+            if(FrontNode->left){
+                Q.push(FrontNode->left);
+            }
+
+            if(FrontNode->right){
+                Q.push(FrontNode->right);
+            }
+        }
+    }
+
+}
+
+
+void inOrder(Node* root, vector<int> &arr){
+    if(root == NULL){
+        return;
+    }
+
+    inOrder(root->left, arr);
+    arr.push_back(root->data);
+    inOrder(root->right, arr);
+}
+
+void fillPreOrder(Node* root, int &index, vector<int> arr){
+    if(root == NULL){
+        return;
+    }
+
+    if(index < arr.size()){
+        root->data = arr[index++];
+    }
+
+    fillPreOrder(root->left, index, arr);
+    fillPreOrder(root->right, index, arr);
+}
+
+void BST_Heap(Node* root){
+    vector<int> arr;
+    inOrder(root, arr);
+
+    int i = 0;
+
+    fillPreOrder(root, i, arr);
+}
+
+void convertBST_MIN(){
+      Node* root = NULL;
+
+    
+    cout << "Enter data to create a Binary Search Tree (use -1 for NULL children) : ";
+    takeInput(root);
+
+    cout << "Before conversion into Min Heap, BST (Level Order Traversal) : " << endl;
+    levelOrderTraversal(root); 
+
+    BST_Heap(root); 
+
+    cout << "After conversion into Min Heap, Tree (Level Order Traversal) : " << endl;
+    levelOrderTraversal(root); 
+}
+
 int main(){
 
 //   kthSmallestFunction();
 //   kthLargestFunc();
 //   isBinaryTreeHeap();
 // merge2Maxheap();
-minimumCostRope();
+// minimumCostRope();
+convertBST_MIN();
 
     return 0;
 }
