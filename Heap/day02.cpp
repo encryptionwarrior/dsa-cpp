@@ -1,7 +1,44 @@
 #include<iostream>
 #include<vector>
 #include<queue>
+
 using namespace std;
+
+class Node {
+    public:
+        int data;
+        Node* left;
+        Node* right;
+
+    Node(int d){
+        this->data = d;
+        this->left = NULL;
+        this->right = NULL;
+    }
+};
+
+Node* buildTree(Node* root){
+    int data;
+    cout << "Enter the data (-1 for NULL) : ";
+    cin >> data;
+
+    if(data == -1){
+        return NULL;
+    }
+
+    root = new Node(data);
+
+    cout << "Enter the LEFT Child of " << data << " : ";
+    root->left = buildTree(root->left);
+
+
+    cout << "Enter the RIGHT Child of " << data << " : ";
+    root->right = buildTree(root->right);
+
+    return root;
+
+}
+
 
 int kthSmallest(vector<int> arr, int k){
     priority_queue<int> Heap;
@@ -87,10 +124,94 @@ void kthLargestFunc(){
     cout << "Kth Largest element : " << answer << endl;
 }
 
+
+int countNodes(Node* root){
+    if(root == NULL){
+        return 0;
+    }
+
+    int left = countNodes(root->left);
+    int right = countNodes(root->left);
+
+    return left + right + 1;
+};
+
+bool isCBT(Node* root, int index, int cnt){
+    if(root == NULL){
+        return true;
+    }
+
+    if(index >= cnt){
+        return false;
+    }
+
+    bool left = isCBT(root->left, 2 * index + 1, cnt);
+    bool right = isCBT(root->right, 2 * index + 2, cnt);
+
+    return left && right;
+}
+
+bool isMaxOrder(Node* root){
+    if(root == NULL || (root->left == NULL && root->right == NULL)){
+        return true;
+    }
+
+    if(root->right == NULL){
+        return (root->data) > (root->left->data);
+    }
+
+    bool leftOrder = isMaxOrder(root->left);
+    bool rightOrder = isMaxOrder(root->right);
+
+    bool currOrder = (root->data > root->left->data) && (root->data > root->right->data);
+
+    return leftOrder && rightOrder && currOrder;
+}
+
+bool isMinOrder(Node* root){
+    if(root == NULL || (root->left == NULL && root->right == NULL)){
+        return true;
+    }
+
+    if(root->right == NULL){
+        return (root->data) < (root->left->data);
+    }
+
+    bool leftOrder = isMinOrder(root->left);
+    bool rightOrder = isMinOrder(root->right);
+
+    bool currOrder = (root->data < root->left->data) && (root->data < root->right->data);
+
+    return leftOrder && rightOrder && currOrder;
+}
+
+bool checkMaxHeap(Node* root){
+    int nodeCount = countNodes(root);
+    return isCBT(root, 0, nodeCount) && isMinOrder(root);
+}
+
+void isBinaryTreeHeap(){
+    Node* root = NULL;
+    cout << "Enter data to create a binary tree (use -1 for NULL children) : ";
+    root = buildTree(root);
+
+    bool isMaxHeapOrder = checkMaxHeap(root);
+    bool isMinHeapOrder = checkMaxHeap(root);
+
+    if(isMaxHeapOrder){
+        cout << "Given Binary Tree is a Max Heap!" << endl;
+    } else if(isMinHeapOrder){
+        cout << "Given binary Tree is a min  heap!" << endl;
+    } else {
+        cout << "Given Binary tree is not a heap!" << endl;
+    }
+}
+
 int main(){
 
 //   kthSmallestFunction();
-  kthLargestFunc();
+//   kthLargestFunc();
+  isBinaryTreeHeap();
 
     return 0;
 }
