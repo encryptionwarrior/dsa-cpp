@@ -134,8 +134,112 @@ void fnMergeKSortedArr(){
     cout << endl;
 }
 
+class List {
+    public:
+        int data;
+        List* next;
+
+        List(int data){
+            this->data = data;
+            this->next = NULL;
+        }
+};
+
+void insert(List* &head, List* &tail, int val){
+    List* temp = new List(val);
+    if(head == NULL){
+        head = tail = temp;
+    } else {
+        tail->next = temp;
+        tail = temp;
+    }
+}
+
+class compare2 {
+    public:
+        bool operator () (List* a, List* b){
+            return a->data > b->data;
+        }
+};
+
+List* mergeSortedLists(vector<List*> kLists){
+    priority_queue<List*, vector<List*>, compare2> minHeap;
+    int k = kLists.size();
+
+    if(k == 0){
+        return NULL;
+    }
+
+    for(int i = 0; i < k; i++){
+        if(kLists[i] != NULL){
+            minHeap.push(kLists[i]);
+        }
+    }
+
+    List* head = NULL;
+    List* tail = NULL;
+
+    while(minHeap.size() > 0){
+        List* top = minHeap.top();
+        minHeap.pop();
+
+        if(top->next != NULL){
+            minHeap.push(top->next);
+        }
+
+        if(head == NULL){
+            head = tail = top;
+        } else {
+            tail->next = top;
+            tail = top;
+        }
+
+        tail->next = NULL;
+    }
+
+    return head;
+}
+
+void fnMergeKOsrtedList(){
+    vector<List*> kLists;
+    int k;
+
+    cout << "Enter the value of k (number of lists) : ";
+    cin >> k;
+
+    for(int i = 0; i < k; i++){
+        List* head = NULL;
+        List* tail = NULL;
+
+        cout << "Enter the value for list " << i + 1 << " (-1 to stop) :  ";
+
+        int val;
+        cin >> val;
+
+        do {
+            if(val != -1){
+                insert(head, tail, val);
+            }
+            cin >> val;
+        } while(val != -1);
+        kLists.push_back(head);
+    }
+
+    List* mergedHead = mergeSortedLists(kLists);
+
+    List* temp_ptr = mergedHead;
+    cout << "Merged List : ";
+
+    while(temp_ptr != NULL){
+        cout << temp_ptr->data << " ";
+        temp_ptr = temp_ptr->next;
+    }
+    cout << endl;
+}
+
 int main(){
     // findKthLarhestSum();
-    fnMergeKSortedArr();
+    // fnMergeKSortedArr();
+    fnMergeKOsrtedList();
     return 0;
 }
