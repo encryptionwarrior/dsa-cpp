@@ -1,6 +1,7 @@
 #include<iostream>
 #include<vector>
 #include<queue>
+#include<limits.h>
 using namespace std;
 
 int kthLargestSumOfSubArrays(vector<int>arr, int k){
@@ -237,9 +238,101 @@ void fnMergeKOsrtedList(){
     cout << endl;
 }
 
+class Node2 {
+    public: 
+        int data;
+        int row;
+        int col;
+    
+    Node2(int data, int row, int col){
+        this->data = data;
+        this->row = row;
+        this->col = col;
+    }
+};
+
+
+class compare3 {
+    public: 
+        bool operator () (Node* a, Node *b){
+            return a->data > b->data;
+        }
+};
+
+int smallestRange(vector<vector<int>> kArrays, int k, int n){
+    priority_queue<Node*, vector<Node*>, compare3> minHeap;
+    int mini = INT_MAX;
+    int maxi = INT_MIN;
+
+    for(int row = 0; row < k; row++){
+        int element = kArrays[row][0];
+        mini = min(mini, element);
+        maxi = max(maxi, element);
+        minHeap.push(new Node(element, row, 0));
+
+    }
+
+    int start = mini;
+    int end = maxi;
+
+    while(!minHeap.empty()){
+        Node* temp = minHeap.top();
+        minHeap.pop();
+
+        mini = temp->data;
+
+        if(maxi - mini < end - start){
+            start = mini;
+            end = maxi;
+        }
+
+        if(temp->col + 1 < kArrays[temp->row].size()){
+            int nextElement = kArrays[temp->row][temp->col+1];
+            maxi = max(maxi, nextElement);
+            minHeap.push(new Node(nextElement, temp->row, temp->col + 1));
+        } else {
+            break;
+        }
+    }
+
+    return (end - start) + 1;
+}
+
+void smallestRangeKList(){
+    vector<vector<int>> kArrays;
+    int K;
+    int N;
+
+    cout << "Enter the value of K (number of Arrays) : ";
+    cin >> K;
+
+
+    cout << "Enter the size of each array (assuming all arrays have this size ) : ";
+    cin >> N;
+
+    for(int i = 0; i < K; i++){
+        vector<int> curr(N);
+
+        cout << "Enter the " << N << " elements of array " << i + 1 << " (must be sorted) : ";
+
+        for(int j = 0; j < N; j++){
+            cin >> curr[N];
+        }
+
+        kArrays.push_back(curr);
+    }
+
+    int range = smallestRange(kArrays, K, N);
+
+    cout << "Smallest range in the given sorted lists : " << range << endl;
+
+
+}
+
 int main(){
     // findKthLarhestSum();
     // fnMergeKSortedArr();
-    fnMergeKOsrtedList();
+    // fnMergeKOsrtedList();
+    smallestRangeKList();
     return 0;
 }
