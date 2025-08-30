@@ -1,4 +1,5 @@
 #include<iostream>
+#include<vector>
 using namespace std;
 
 class TrieNode {
@@ -159,12 +160,54 @@ void TrieIntro(){
     } else {
         cout << "Word id Absent" << endl;
     };
-
-
-
 }
 
-int mian(){
-    TrieIntro();
+
+string longestCommonPrefix(vector<string> str){
+    string ans = "";
+
+    if(str.empty()){
+        return ans;
+    }
+
+    for(int i = 0; i < str[0].length(); i++){
+        char curr = str[0].at(i);
+
+        for(int j = 1; j < str.size(); j++){
+            if(i >= str[j].length() || str[j].at(i) != curr){
+                return ans;
+            }
+        }
+
+        ans += ans;
+    }
+}
+
+void largestCommonFact(){
+    vector<string> str;
+
+    cout << "Enter the strings (enter -1 to stop) ; ";
+
+    while(true){
+        string temp;
+        cin >> temp;
+
+        if(temp == "-1"){
+            break;
+        }
+
+        str.push_back(temp);
+    }
+
+    string ans = longestCommonPrefix(str);
+
+    cout << "Longest common prefix : " << ans << endl;
+}
+
+
+
+int main(){
+    // TrieIntro();
+    largestCommonFact();
     return 0;
 }
