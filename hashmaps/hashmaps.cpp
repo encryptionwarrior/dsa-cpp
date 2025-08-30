@@ -1,5 +1,8 @@
 #include<iostream>
+#include<unordered_map>
+#include<vector>
 #include<map>
+#include<limits.h>
 using namespace std;
 
 void unOrderedMap(){
@@ -38,8 +41,44 @@ void unOrderedMap(){
 
 }
 
+
+int maximumFrequency(vector<int> arr, int n){
+    unordered_map<int, int> M;
+
+    int maxi = INT_MIN;
+
+    for(int i = 0; i < n; i++){
+        M[arr[i]]++;
+
+        maxi = max(maxi, M[arr[i]]);
+    }
+
+    for(int i = 0; i < n; i++){
+        if(M[arr[i]] == maxi){
+            return arr[i];
+        }
+    }
+
+    return -1;
+}
+
 int main(){
 
-    unOrderedMap();
+    vector<int> arr;
+
+    cout << "Enter the elements of array (enter -1 to stop) : ";
+    int data;
+    cin >> data;
+
+    while(data != -1){
+        arr.push_back(data);
+        cin >> data;
+    }
+
+    int ans = maximumFrequency(arr, arr.size());
+
+    cout << "elements with maximum frequency : " << ans << endl;
+
+    // unOrderedMap();
     return 0;
 }
