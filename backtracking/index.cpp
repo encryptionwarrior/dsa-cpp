@@ -1,5 +1,6 @@
 #include<iostream>
 #include<vector>
+#include<map>
 using namespace std;
 
 bool isSafe(vector<vector<int>>maze, vector<vector<int>> visited, int n, int newX, int newY){
@@ -182,9 +183,76 @@ void NQueens(){
     }
 }
 
+map<int, bool> rowCheck;
+map<int, bool> upperCheck;
+map<int, bool> lowerCheck;
+
+bool isSafeQueensHashMaps(int row, int col, int n){
+    return !(rowCheck[row] == true || upperCheck[row + col] == true || lowerCheck[n + row - col] == true);
+}
+
+void solveHashMaps(int col, vector<vector<int>> & solution, vector<vector<int>> &board, int n){
+    if(col == n){
+        addSolution(board, solution);
+        return;
+    }
+
+    for(int row = 0; row < n; row++){
+        if(isSafeQueensHashMaps(row, col, n)){
+            board[row][col] = 1;
+
+            rowCheck[row] = true;
+            upperCheck[row+col] = true;
+            lowerCheck[n + row - col] = true;
+
+            solveHashMaps(col + 1, solution, board, n);
+
+            board[row][col] = 0;
+
+            rowCheck[row] = false;
+            upperCheck[row + col] = false;
+            lowerCheck[n + row - col] = false;
+        }
+    }
+}
+
+vector<vector<int>> nQueensHashmaps(int n){
+    vector<vector<int>> solution;
+
+    vector<vector<int>> board(n, vector<int>(n, 0));
+
+    rowCheck.clear();
+    upperCheck.clear();
+    lowerCheck.clear();
+
+    solveHashMaps(0, solution, board, n);
+    return solution;
+}
+
+void NQUEENSHASHMAPS(){
+    int n;
+    cout << "Enter the value of n : ";
+    cin >> n;
+
+    vector<vector<int>> solution = nQueensHashmaps(n);
+    int i = 0;
+
+    if(solution.empty()){
+        cout << "\nNo possible configurations for n = " << n << endl;
+    } else {
+        for(vector<int> config : solution){
+            cout << endl << "Possible configuration [" << ++i << "] : ";
+            for(int val: config){
+                cout << val << " ";
+            }
+        }
+        cout << endl;
+    }
+}
 
 int main(){
     // ratInMaze();
-    NQueens();
+    // NQueens();
+    NQUEENSHASHMAPS();
     return 0;
 }
