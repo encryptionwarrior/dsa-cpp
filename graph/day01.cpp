@@ -1,5 +1,6 @@
 #include<iostream>
 #include<list>
+#include<vector>
 #include<unordered_map>
 using namespace std;
 
@@ -99,8 +100,60 @@ void adjListGen(){
 
 }
 
+
+
+class GraphMatrix {
+    public:
+        vector<vector<int>> adjMat;
+
+        GraphMatrix(int nodeCount){
+            adjMat = vector<vector<int>>(nodeCount, vector<int>(nodeCount, 0));
+        }
+
+        void addEdge(int u, int v, bool direction){
+            adjMat[u][v] = 1;
+
+            if(direction == false){
+                adjMat[v][u] = 1;
+            }
+        }
+
+        void printAdjMatrix(){
+            for(int i = 0; i < adjMat.size(); i++){
+                cout << i << " -> ";
+
+                for(int j = 0; j < adjMat.size(); j++){
+                    cout << adjMat[i][j] << " ";
+                }
+                cout << endl;
+            }
+        }
+};
+
+void adjacencyMatrix(){
+    int n, m;
+    cout << "Enter the number of nodes : ";
+    cin >> n;
+    cout << "Enter the number of edges : ";
+    cin >> m;
+
+    GraphMatrix G(n);
+
+    cout << "Enter edges (u v) : " << endl;
+
+    for(int i = 0; i < m; i++){
+        int u, v;
+        cin >> u >> v;
+        G.addEdge(u, v, 0);
+    }
+
+    cout << "\nAdjacency list: " << endl;
+    G.printAdjMatrix();
+}
+
 int main(){
     // adjcencyList();
-    adjListGen();
+    // adjListGen();
+    adjacencyMatrix();
     return 0;
 }
