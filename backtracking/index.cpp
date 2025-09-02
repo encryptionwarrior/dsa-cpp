@@ -98,7 +98,93 @@ void ratInMaze(){
 
 }
 
+
+void addSolution(vector<vector<int>> board, vector<vector<int>> & sol){
+    vector<int> temp;
+
+    for(vector<int> row_vec: board){
+        for(int cell_val: row_vec){
+            temp.push_back(cell_val);
+        }
+    }
+    sol.push_back(temp);
+}
+
+
+bool isSafeQueen(int row, int col, vector<vector<int>> board, int n){
+    for(int j = col; j >= 0; j--){
+        if(board[row][j] == 1){
+            return false;
+        }
+    }
+
+
+    for(int i= row, j = col; i >= 0 && j >= 0; i--, j--){
+        if(board[i][j] == 1){
+            return false;
+        }
+    }
+
+
+    for(int i= row, j = col; i < n && j >= 0; i++, j--){
+        if(board[i][j] == 1){
+            return false;
+        }
+    }
+
+    return true;
+}
+
+void solve(int col, vector<vector<int>> &solution, vector<vector<int>> &board, int n){
+    if(col == n){
+        addSolution(board, solution);
+        return;
+    }
+
+    for(int row = 0; row < n; row++){
+        if(isSafeQueen(row, col, board, n)){
+            board[row][col] = 1;
+
+            solve(col + 1, solution, board, n);
+
+            board[row][col] = 0;
+        }
+    }
+}
+
+vector<vector<int>> nQueens(int n){
+    vector<vector<int>> solution;
+    vector<vector<int>> board(n, vector<int>(n, 0));
+
+    solve(0, solution, board, n);
+    return solution;
+}
+
+void NQueens(){
+    int n;
+    cout << "Enter the value of n : ";
+    cin >> n;
+
+    vector<vector<int>> solution = nQueens(n);
+
+    int i = 0;
+    if(solution.empty()){
+        cout << "\nNo possible configurations for n = " << n << endl;
+    } else {
+        for(vector<int> config: solution){
+            cout << endl << "Possilbe configuration [" << ++i << "] : ";
+            for(int val: config){
+                cout << val << " ";
+            }
+        }
+
+        cout << endl;
+    }
+}
+
+
 int main(){
-    ratInMaze();
+    // ratInMaze();
+    NQueens();
     return 0;
 }
