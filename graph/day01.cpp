@@ -151,9 +151,57 @@ void adjacencyMatrix(){
     G.printAdjMatrix();
 }
 
+
+vector<vector<int>> printAdjacencyList(int n , int m, vector<vector<int>> & edges){
+    vector<vector<int>> solution(n);
+
+    for(int i = 0; i < n; i++){
+        solution[i].push_back(i);
+    }
+
+    for(int i = 0; i < m; i++){
+        int u = edges[i][0];
+        int v = edges[i][1];
+
+        solution[u].push_back(v);
+        solution[u].push_back(u);
+    }
+
+    return solution;
+}
+
+void createGraphPrint(){
+     int n, m;
+    cout << "Enter the number of nodes : ";
+    cin >> n;
+    cout << "Enter the number of edges : ";
+    cin >> m;
+
+    vector<vector<int>> edges(m, {0, 0});
+
+    cout << "Enter edges (u v) : " << endl;
+
+    for(int i = 0; i < m; i++){
+       cin >> edges[i][0];
+       cin >> edges[i][1];
+    }
+
+    vector<vector<int>> solution = printAdjacencyList(n, m, edges);
+
+    cout << "\nAdjacency list: " << endl;
+    
+    for(auto current_node_list : solution){
+        for(auto neighbor_or_self : current_node_list){
+            cout << neighbor_or_self << " ";
+        }
+        cout << endl;
+    }
+}
+
 int main(){
     // adjcencyList();
     // adjListGen();
-    adjacencyMatrix();
+    // adjacencyMatrix();
+    createGraphPrint();
     return 0;
 }
