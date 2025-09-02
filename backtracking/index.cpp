@@ -250,9 +250,80 @@ void NQUEENSHASHMAPS(){
     }
 }
 
+bool isSafeSudoku(int row, int col, vector<vector<int>> sudoku, int val){
+    for(int i = 0; i < 9; i++){
+        if(sudoku[row][i] == val){
+            return false;
+        }
+
+        if(sudoku[i][col] == val){
+            return false;
+        }
+
+        if(sudoku[3 * (row / 3) + i / 3][3 * (col / 3) + i % 3] == val){
+            return false;
+        }
+    }
+
+    return false;
+}
+
+bool solveSudoku(vector<vector<int>> &sudoku){
+    for(int row = 0; row < 9; row++){
+        for(int col = 0; col < 9; col++){
+            if(sudoku[row][col] == 0){
+                for(int val = 1; val <= 9; val++){
+                    if(isSafeSudoku(row, col, sudoku, val)){
+                        sudoku[row][col] = val;
+
+                        bool nextSol = solveSudoku(sudoku);
+
+                        if(nextSol){
+                            return true;
+                        } else {
+                            sudoku[row][col] = 0;
+                        }
+                    }
+                }
+
+                return false;
+            }
+        }
+
+    }
+    return true;
+}
+
+    void validSudoku(vector<vector<int>> &sudoku){
+        solveSudoku(sudoku);
+    }
+
+void checkValidSudoku(){
+    vector<vector<int>> sudoku(9, vector<int>(9, 0));
+
+    cout << "Enter the sudoku puzzle ( use 0 for empty cells: )" << endl;
+
+    for(int i = i = 0; i < 9; i++){
+        for(int j = 0; j < 9; j++){
+            cin >> sudoku[i][j];
+        }
+    }
+
+    validSudoku(sudoku);
+
+    cout << "Solved sudoku : " << endl;
+    for(int i = 0; i < 9; i++){
+        for(int j = 0; j < 9; j++){
+            cout << sudoku[i][j] << " ";
+        }
+        cout << endl;
+    }
+}
+
 int main(){
     // ratInMaze();
     // NQueens();
-    NQUEENSHASHMAPS();
+    // NQUEENSHASHMAPS();
+    checkValidSudoku();
     return 0;
 }
