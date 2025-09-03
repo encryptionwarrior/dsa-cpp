@@ -78,7 +78,82 @@ void BFSTraversal(){
     cout << endl;
 }
 
+
+void traversalDFS(unordered_map<int, list<int>> &adjList, unordered_map<int,bool> &visited, vector<int>&component, int node) {
+    component.push_back(node);
+    visited[node] = 1;
+
+    for(auto neighbor : adjList[node]){
+        if(!visited[neighbor]){
+            traversal(adjList, visited, component, neighbor);
+        }
+    }
+}
+
+vector<vector<int>> DFS(int V, int E, vector<vector<int>> &edges){
+    unordered_map<int, list<int>> adjList;
+
+    vector<vector<int>> answer;
+
+    unordered_map<int, bool> visited;
+
+    for(int i = 0; i < edges.size(); i++){
+        int u = edges[i][0];
+        int v = edges[i][1];
+
+        adjList[u].push_back(v);
+        adjList[v].push_back(u);
+
+    }
+
+    for(int i = 0; i < V; i++){
+        if(!visited[i]){
+            vector<int> component;
+            traversal(adjList, visited, component, i);
+            answer.push_back(component);
+        }
+    }
+
+    return answer;
+}
+
+
+void DFSTraversal(){
+    int n, m;
+
+    cout << "Enter the number of nodes : ";
+    cin >> n;
+
+
+    cout << "Enter the number of edges : ";
+    cin >> m;
+
+    vector<vector<int>> edges(m, {0, 0});
+
+    cout << "Enter the edges (u, v) : " << endl;
+    for(int i = 0; i < m; i++){
+        cin >> edges[i][0];
+        cin >> edges[i][1];
+    }
+
+    vector<vector<int>> solution = DFS(n, m, edges);
+
+    cout << "DFS Traversal" " ";
+    int component_idx = 0;
+    for(auto component : solution){
+        cout << "Component " << ++component_idx << ": ";
+        for(auto node_val: component){
+            cout << node_val << " ";
+        }
+        cout << endl;
+    }
+
+}
+
+
+
 int main(){
-    BFSTraversal();
+    // BFSTraversal();
+    DFSTraversal();
     return 0;
 }
