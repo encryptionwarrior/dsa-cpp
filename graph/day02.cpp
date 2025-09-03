@@ -230,10 +230,79 @@ void cycleDetectionUsingBFS(){
 
 }
 
+bool isCyclicDFS(unordered_map<int, list<int>> &adjList, unordered_map<int, bool>&visited, int Node, int parent){
+    visited[Node] = true;
+
+    for(auto neighbor: adjList[Node]){
+        if(visited[neighbor] == false){
+            bool isCycleFound = isCyclicDFS(adjList, visited, neighbor, Node);
+            if(isCycleFound){
+                return true;
+            }
+        } else if(neighbor != parent){
+            return true;
+        }
+    }
+
+    return false;
+}
+
+string cycleDetectionDFS(vector<vector<int>>&edges, int n, int m){
+    unordered_map<int, list<int>> adjList;
+
+    unordered_map<int, bool> visited;
+
+    for(int i = 0; i < m; i++){
+        int u = edges[i][0];
+        int v = edges[i][1];
+
+        adjList[u].push_back(v);
+        adjList[v].push_back(u);
+    }
+
+    for(int i = 1; i <= n; i++){
+        if(visited[i] == false){
+            bool ans = isCyclicDFS(adjList, visited, i, -1);
+
+            if(ans){
+                return "YES";
+            }
+        }
+    }
+
+    return "NO";
+}
+
+
+void cycleDetectionUsingDFS(){
+    int n, m;
+
+    cout << "Enter the number of nodes : ";
+    cin >> n;
+
+
+    cout << "Enter the number of edges : ";
+    cin >> m;
+
+    vector<vector<int>> edges;
+
+    cout << "Enter the edges (u, v) : " << endl;
+    for(int i = 0; i < m; i++){
+        int u, v;
+        cin >> u >> v;
+    edges.push_back({u, v});
+    }
+
+    string ans = cycleDetectionDFS(edges, n, m);
+
+    cout << "Cycle Detection Result : " << ans << endl;
+
+}
 
 int main(){
     // BFSTraversal();
     // DFSTraversal();
-    cycleDetectionUsingBFS();
+    // cycleDetectionUsingBFS();
+    cycleDetectionUsingDFS();
     return 0;
 }
