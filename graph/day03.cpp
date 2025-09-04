@@ -228,6 +228,76 @@ void topologicalSortKanhs(){
 }
 
 
+bool detectCyclicInDirectedGraph(int n, vector<pair<int, int>> &edges){
+    unordered_map<int, list<int>> adjList;
+
+    vector<int> indegree(n, 0);
+
+    for(int i = 0; i < edges.size(); i++){
+        int u = edges[i].first;
+        int v = edges[i].second;
+
+        adjList[u].push_back(v);
+        indegree[v]++;
+    }
+
+    queue<int> qu;
+
+    int count = 0;
+
+    for(int i = 0; i < n; i++){
+        if(indegree[i] == 0){
+            qu.push(i);
+        }
+    }
+
+    while(!qu.empty()){
+        count++;
+
+        int frontVal = qu.front();
+        qu.pop();
+
+        for(int neighbor: adjList[frontVal]){
+            indegree[neighbor]--;
+            
+            if(indegree[neighbor] == 0){
+                qu.push(neighbor);
+            }
+        }
+    }
+
+    return (count == n) ? false : true;
+}
+
+
+void topologicalSortKanhs(){
+    int n, m;
+
+    cout << "Enter the number of nodes : ";
+    cin >> n;
+
+
+    cout << "Enter the number of edges : ";
+    cin >> m;
+
+    vector<pair<int, int>> edges;
+
+    cout << "Enter the edges (u, v) : " << endl;
+    for(int i = 0; i < m; i++){
+        int u, v;
+        cin >> u >> v;
+    edges.push_back({u, v});
+    }
+
+    bool answer = detectedCyclicIndirectedGraph( n, edges);
+
+    if(answer){
+        cout << "Cycle is present" << endl;
+    } else {
+        cout << "Cycle is not present" << endl;
+    }
+}
+
 int main(){
 // cycleDetectionInDirectedGraph();
 // topologicalSortDFS();
