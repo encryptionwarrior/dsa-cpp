@@ -2,6 +2,7 @@
 #include<vector>
 #include<string>
 #include<list>
+#include<stack>
 #include<unordered_map>
 using namespace std;
 
@@ -80,7 +81,79 @@ void cycleDetectionInDirectedGraph(){
 }
 
 
+void solveDFS(unordered_map<int, list<int>> &adjList, stack<int> &st, vector<bool> &visited, int node){
+    visited[node] = true;
+
+    for(auto neighbor: adjList[node]){
+        if(!visited[neighbor]){
+            solveDFS(adjList, st, visited, neighbor);
+        }
+    }
+    st.push(node);
+}
+
+vector<int> topologicalSort(vector<vector<int>> &edges, int v, int e){
+    unordered_map<int, list<int>> adjList;
+
+    for(int i = 0; i < e; i++){
+        int u = edges[i][0];
+        int v = edges[i][1];
+        adjList[u].push_back(v);
+    }
+
+    vector<int> solution;
+    stack<int> st;
+    vector<bool> visited(v, false);
+
+    for(int i = 0; i < v; i++){
+        if(!visited[i]){
+            solveDFS(adjList, st, visited, i);
+        }
+    }
+
+    while(!st.empty()){
+        solution.push_back(st.top());
+        st.pop();
+    }
+
+    return solution;
+}
+
+
+void topologicalSortDFS(){
+    int n, m;
+
+    cout << "Enter the number of nodes : ";
+    cin >> n;
+
+
+    cout << "Enter the number of edges : ";
+    cin >> m;
+
+    vector<vector<int>> edges;
+
+    cout << "Enter the edges (u, v) : " << endl;
+    for(int i = 0; i < m; i++){
+        int u, v;
+        cin >> u >> v;
+    edges.push_back({u, v});
+    }
+
+    vector<int> topSort = topologicalSort(edges, n, m);
+
+  cout << "Topological Sort : ";
+  for(int x : topSort){
+    cout << x << " ";
+  }
+  cout << endl;
+
+
+}
+
+
+
 int main(){
-cycleDetectionInDirectedGraph();
+// cycleDetectionInDirectedGraph();
+topologicalSortDFS();
     return 0;
 }
