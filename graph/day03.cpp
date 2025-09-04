@@ -3,6 +3,7 @@
 #include<string>
 #include<list>
 #include<stack>
+#include<queue>
 #include<unordered_map>
 using namespace std;
 
@@ -146,14 +147,90 @@ void topologicalSortDFS(){
     cout << x << " ";
   }
   cout << endl;
+}
 
+void solveDFSKahns(vector<int> &solution, unordered_map<int, list<int>>&adjList, queue<int>&qu, vector<int>&indegree, vector<bool> &visited ){
+    if(qu.empty()){
+        return;
+    }
+
+    int frontval = qu.front();
+    qu.pop();
+
+    solution.push_back(frontval);
+    visited[frontval] = 1;
+
+    for(int neighbor : adjList[frontval]){
+        indegree[neighbor]--;
+
+        if(!visited[neighbor] && indegree[neighbor] == 0){
+            qu.push(neighbor);
+        }
+    }
+
+    solveDFSKahns(solution, adjList, qu, indegree, visited);
+}
+
+vector<int> topologicalSortKanhs(vector<vector<int>> &edges, int v, int e){
+    unordered_map<int, list<int>> adjList;
+    vector<int> indegree(v, 0);
+
+    for(int i = 0; i < e; i++){
+        int u = edges[i][0];
+        int v_node = edges[i][1];
+
+        adjList[u].push_back(v_node);
+        indegree[v_node]++;
+    }
+
+    queue<int> qu;
+    vector<bool> visited(v, false);
+    vector<int> solution;
+
+    for(int i = 0; i < v; i++){
+        if(indegree[i] == 0){
+            qu.push(i);
+        }
+    }
+
+    solveDFSKahns(solution, adjList, qu, indegree, visited);
+
+    return solution;
 
 }
 
+void topologicalSortKanhs(){
+    int n, m;
+
+    cout << "Enter the number of nodes : ";
+    cin >> n;
+
+
+    cout << "Enter the number of edges : ";
+    cin >> m;
+
+    vector<vector<int>> edges;
+
+    cout << "Enter the edges (u, v) : " << endl;
+    for(int i = 0; i < m; i++){
+        int u, v;
+        cin >> u >> v;
+    edges.push_back({u, v});
+    }
+
+    vector<int> topSort = topologicalSortKanhs(edges, n, m);
+
+  cout << "Topological Sort : ";
+  for(int x : topSort){
+    cout << x << " ";
+  }
+  cout << endl;
+}
 
 
 int main(){
 // cycleDetectionInDirectedGraph();
-topologicalSortDFS();
+// topologicalSortDFS();
+topologicalSortKanhs();
     return 0;
 }
