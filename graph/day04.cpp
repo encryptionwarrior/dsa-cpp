@@ -348,15 +348,67 @@ vector<int> shorestPathDijkstras(vector<vector<int>> &edges, int n, int m, int s
 
             if(nodeDistance + edgeWeight < distance[neighbor]){
                 auto record = st.find({distance[neighbor], neighbor});
+                if(record !=  st.end()){
+                    st.erase(record);
+                }
+
+                distance[neighbor] = nodeDistance + edgeWeight;
+
+                st.insert({distance[neighbor], neighbor});
             }
 
         }
     }
+
+    return distance;
+}
+
+void shortestPathUsingDijkstras(){
+     int n, m;
+    int src, tar;
+
+    cout << "Enter the number of nodes : ";
+    cin >> n;
+
+
+    cout << "Enter the number of edges : ";
+    cin >> m;
+
+    vector<vector<int>> edges;
+
+    cout << "Enter the edges (u, v) : " << endl;
+    for(int i = 0; i < m; i++){
+        int u, v, w;
+        cin >> u >> v >> w;
+    edges.push_back({u, v, w});
+    }
+
+    cout << "Enter the source : ";
+    cin >> src;
+
+    vector<int> answer_distance = shorestPathDijkstras(edges, n, m, src);
+
+    cout << "Shortest distance from source : " << src << ":" << endl;
+
+
+    for(int i = 0; i < n; i++){
+        cout << "Node " << i
+ << "; ";
+ if(answer_distance[i] == INT_MAX){
+    cout << "INF";
+ } else {
+    cout << answer_distance[i];
+ }
+    }
+        
+
+    cout << endl;
 }
 
 int main(){
     // shortestPathUsingUnidirectional();
     // shortestPathUsingDirectedAcyclic();
-    shorestPathDAGClass();
+    // shorestPathDAGClass();
+    shortestPathUsingDijkstras();
     return 0;
 }
