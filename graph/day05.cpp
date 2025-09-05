@@ -107,10 +107,103 @@ void exePrismMST(){
 
 }
 
+int findParent(vector<int> &parent, int node){
+    if(parent[node] == node){
+        return node;
+    }
+
+    return parent[node] = findParent(parent, parent[node]);
+}
+
+void unioinSet(int u, int v, vector<int> &parent, vector<int> &rank){
+    u = findParent(parent, u);
+    v = findParent(parent, v);
+
+    if(u == v){
+        return;
+    }
+
+    if(rank[u] < rank[v]){
+        parent[u] = v;
+    } else if(rank[v] < rank[u]){
+        parent[v] = u;
+    } else {
+        parent[v] = u;
+        rank[u]++;
+    }
+}
+
+void initializeDSU(int n, vector<int> &parent, vector<int> &rank){
+    for(int i = 0; i < n; i++){
+        parent[i] = i;
+        rank[i] = 0;
+    }
+}
+
+void DisjointSetExec(){
+      vector<vector<int>> edges; // Stores edges in format {u, v, w}.
+    int n, m;                 // 'n' for nodes, 'm' for edges.
+
+    cout << "Enter the number of nodes : ";
+    cin >> n;
+
+    cout << "Enter the number of edges : ";
+    cin >> m;
+
+    cout << "Enter the edges (u v w): " << endl;
+    for(int i = 0; i < m; i++) {
+        int u, v, w;
+        cin >> u >> v >> w;
+        edges.push_back({u, v, w});
+    }
+
+    // NOTE: The `calculatePrimsMST` function is empty.
+    // If you intend to use DSU for Kruskal's, you'd implement Kruskal's here or in a separate function.
+    // Example of DSU usage for a simple connectivity check:
+    vector<int> parent(n);
+    vector<int> rank(n);
+    initializeDSU(n, parent, rank); // Initialize DSU for 'n' nodes.
+
+    cout << "\nDSU Operations (Example):" << endl;
+    // Let's process some edges to see DSU in action (e.g., from the input 'edges')
+    for(const auto& edge : edges) {
+        int u = edge[0];
+        int v = edge[1];
+        int weight = edge[2]; // Weight is ignored for connectivity, but part of edge struct.
+
+        int rootU = findParent(parent, u);
+        int rootV = findParent(parent, v);
+
+        if (rootU != rootV) {
+            cout << "Nodes " << u << " and " << v << " are in different components. Unioning them." << endl;
+            unioinSet(u, v, parent, rank);
+        } else {
+            cout << "Nodes " << u << " and " << v << " are already in the same component (edge " << u << "-" << v << " forms a cycle)." << endl;
+        }
+    }
+    cout << "\nFinal parent array (after example DSU operations):" << endl;
+    for (int i = 0; i < n; ++i) {
+        cout << "parent[" << i << "] = " << parent[i] << " (root: " << findParent(parent, i) << ")" << endl;
+    }
+
+
+    // The original `calculatePrimsMST` call, which currently returns an empty vector.
+    // To complete this, you'd implement Kruskal's algorithm using the DSU functions.
+    vector<pair<pair<int, int>, int>> answer = calculatePrismMST(edges, n, m);
+
+    // This loop will print nothing if `calculatePrimsMST` is empty.
+    // It's meant to print MST edges.
+    cout << "\nMST Edges (if Kruskal's was implemented):" << endl;
+    for(pair<pair<int, int>, int> x : answer) {
+        pair<int,int> a = x.first;
+        int b = x.second;
+        cout << a.first << "-" << a.second << " : " << b << endl;
+    }
+}
 
 int main(){
 
-    exePrismMST();
-
+    // exePrismMST();
+DisjointSetExec();
     return 0;
 }
