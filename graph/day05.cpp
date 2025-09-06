@@ -2,6 +2,7 @@
 #include<vector>
 #include<unordered_map>
 #include<list>
+#include<algorithm>
 #include<limits.h>
 using namespace std;
 
@@ -201,9 +202,98 @@ void DisjointSetExec(){
     }
 }
 
+bool compare(vector<int> &a, vector<int> &b){
+    return a[2] < b[2];
+};
+
+int findParentKruskals(vector<int> &parent, int node){
+    if(parent[node] == node){
+        return node;
+    }
+
+    return parent[node] = findParent(parent, parent[node]);
+}
+
+
+void unionSet(int u, int v, vector<int> &parent, vector<int> &rank){
+    u = findParentKruskals(parent, u);
+    v = findParentKruskals(parent, v);
+
+    if(u == v){
+        return;
+    }
+
+    if(rank[u] < rank[v]){
+        parent[u] = v;
+    } else if(rank[v] < rank[u]){
+        parent[v] = u;
+    } else {
+        parent[v] = u;
+        rank[u]++;
+    }
+}
+
+int calculateKruslasMST(vector<vector<int>> &edges, int n){
+    vector<int> parent(n);
+    vector<int> rank(n);
+
+    for(int i = 0; i < n; i++){
+        parent[i] = i;
+        rank[i] = 0;
+    }
+
+    sort(edges.begin(), edges.end(), compare);
+
+    int minWeight = 0;
+
+    for(int i = 0; i < edges.size(); i++){
+        int u_node = edges[i][0];
+        int v_node = edges[i][1];
+        int weight = edges[i][2];
+
+        int rootU = findParentKruskals(parent, u_node);
+        int rootV = findParentKruskals(parent, v_node);
+
+        if(rootU != rootV){
+            unioinSet(rootU, rootV, parent, rank);
+
+            minWeight += weight;
+        }
+    }
+
+    return minWeight;
+}
+
+
+void kruskalsMSTExec(){
+      vector<vector<int>> edges; // Stores edges in format {u, v, w}.
+    int n, m;                 // 'n' for nodes, 'm' for edges.
+
+    cout << "Enter the number of nodes : ";
+    cin >> n;
+
+    cout << "Enter the number of edges : ";
+    cin >> m;
+
+    cout << "Enter the edges (u v w): " << endl;
+    for(int i = 0; i < m; i++) {
+        int u, v, w;
+        cin >> u >> v >> w;
+        edges.push_back({u, v, w});
+    }
+
+    int minHeight = calculateKruslasMST(edges, n);
+
+    cout << "Weigght of kruskal's MST : " << minHeight << endl;
+
+
+}
+
+
 int main(){
 
     // exePrismMST();
-DisjointSetExec();
+// DisjointSetExec();
+kruskalsMSTExec();
     return 0;
 }
