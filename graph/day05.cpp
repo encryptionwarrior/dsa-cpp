@@ -285,15 +285,95 @@ void kruskalsMSTExec(){
     int minHeight = calculateKruslasMST(edges, n);
 
     cout << "Weigght of kruskal's MST : " << minHeight << endl;
+}
 
+
+void dfs(int node, int parent, int &timer, vector<int> &disc, vector<int> &low, vector<vector<int>> &result, unordered_map<int, list<int>> &adjList, vector<bool> &visited){
+    visited[node] = true;
+    disc[node] = low[node] = timer++;
+
+    for(auto neigh : adjList[node]){
+        if(neigh == parent){
+            continue;
+        }
+
+        if(visited[neigh] == false){
+            dfs(neigh, node, timer, disc, low, result, adjList, visited);
+
+            low[node] = min(low[node], low[neigh]);
+
+            if(low[neigh] > disc[node]){
+                result.push_back({node, neigh});
+            }
+        } else {
+            low[node] = min(low[node], disc[neigh]);
+        }
+    }
+}
+
+vector<vector<int>> findBridges(vector<vector<int>> &edges, int n, int m){
+    unordered_map<int, list<int>> adjList;
+    for(int i = 0; i < m; i++){
+        int u = edges[i][0];
+        int v = edges[i][1];
+
+        adjList[u].push_back(v);
+        adjList[v].push_back(u);
+    }
+
+    int timer = 0;
+    vector<int> disc(n, -1);
+    vector<int> low(n, -1);
+    int parent = -1;
+    vector<bool> visited(n, false);
+    vector<vector<int>> result;
+    for(int i = 0; i < n; i++){
+        if(!visited[i]){
+            dfs(i, parent, timer, disc, low, result, adjList, visited);
+        }
+    }
+
+    return result;
 
 }
 
+void BridgesInParagraphExec(){
+      vector<vector<int>> edges; // Stores edges in format {u, v, w}.
+    int n, m;                 // 'n' for nodes, 'm' for edges.
+
+    cout << "Enter the number of nodes : ";
+    cin >> n;
+
+    cout << "Enter the number of edges : ";
+    cin >> m;
+
+    cout << "Enter the edges (u v w): " << endl;
+    for(int i = 0; i < m; i++) {
+        int u, v;
+        cin >> u >> v;
+        edges.push_back({u, v});
+    }
+
+    vector<vector<int>> answer_bridges = findBridges(edges, n, m);
+
+    cout << "Bridges Edges" ;
+
+    if(answer_bridges.empty()){
+        cout << "None";
+    } else {
+        for(const auto& bridge_edge: answer_bridges){
+            cout << "[" << bridge_edge[0] << "," << bridge_edge[1] << "]";
+        }
+    }
+
+    cout << endl;
+}
 
 int main(){
 
     // exePrismMST();
 // DisjointSetExec();
-kruskalsMSTExec();
+// kruskalsMSTExec();
+BridgesInParagraphExec();
     return 0;
 }
