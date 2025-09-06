@@ -554,6 +554,75 @@ void KosarajuAlgorithmExec(){
     cout << endl;
 }
 
+vector<int> shortestPathBellmanFord(vector<vector<int>> &edges, int n, int m, int src){
+    vector<int> distance(n, INT_MAX);
+
+    distance[src] = 0;
+
+    for(int i = 0; i < n - 1; i++){
+        for(int j = 0; j < m; j++){
+            int u = edges[j][0];
+            int v = edges[j][1];
+            int w = edges[j][2];
+
+            if(distance[u] != INT_MAX && distance[u] + w < distance[v]){
+                distance[v] = distance[u] + w;
+            }
+        }
+    }
+
+    for(int j = 0; j < m; j++){
+        int u = edges[j][0];
+        int v = edges[j][1];
+        int w = edges[j][2];
+
+        if(distance[u] != INT_MAX && distance[u] + w < distance[v]){
+            return vector<int>(n, INT_MAX);
+        }
+    }
+
+    return distance;
+}
+
+void BellmanFordAlgorithmExec(){
+      vector<vector<int>> edges; // Stores edges in format {u, v, w}.
+    int n, m;   
+    int src;              // 'n' for nodes, 'm' for edges.
+
+    cout << "Enter the number of nodes : ";
+    cin >> n;
+
+    cout << "Enter the number of edges : ";
+    cin >> m;
+
+    cout << "Enter the edges (u v w): " << endl;
+    for(int i = 0; i < m; i++) {
+        int u, v, w;
+        cin >> u >> v >> w;
+        edges.push_back({u, v, w});
+    }
+
+    cout << "Enter the source node : ";
+    cin >> src;
+
+    vector<int> answer = shortestPathBellmanFord(edges, n, m, src);
+
+
+    cout << "Shortest path from  " << src << " : ";
+
+    for(int x: answer){
+        if(x == INT_MAX){
+            cout << "INF";
+        } else {
+            cout << x << " ";
+        }
+    }
+
+
+    cout << endl;
+}
+
+
 
 int main(){
 
@@ -562,6 +631,7 @@ int main(){
 // kruskalsMSTExec();
 // BridgesInParagraphExec();
 // ArticulationPointIngraphExec();
-KosarajuAlgorithmExec();
+// KosarajuAlgorithmExec();
+BellmanFordAlgorithmExec();
     return 0;
 }
