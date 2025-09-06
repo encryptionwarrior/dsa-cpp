@@ -369,11 +369,108 @@ void BridgesInParagraphExec(){
     cout << endl;
 }
 
+void dfsArticulation(int node, int parent, int &timer, vector<int> &disc, vector<int> &low, vector<int> &result, unordered_map<int, list<int>> &adjList, vector<bool> &visisted){
+    visisted[node] = true;
+    disc[node] = low[node] = timer++;
+    int childCount = 0;
+
+    for(auto neigh: adjList[node]){
+        if(neigh == parent){
+            continue;
+        }
+
+        if(visisted[neigh] == false){
+            childCount++;
+
+            dfsArticulation(neigh, node, timer, disc, low, result, adjList, visisted);
+
+            low[node] = min(low[node], low[node]);
+
+            if(low[neigh] >= disc[node] && parent != -1){
+                result.push_back(node);
+            }
+        } else {
+            low[node] = min(low[node], disc[neigh]);
+        }
+    }
+
+    if(parent == -1 && childCount > 1){
+        result.push_back(node);
+    }
+}
+
+vector<int> cutVertes(vector<vector<int>> &edges, int n, int m){
+    unordered_map<int, list<int>> adjList;
+
+    for(int i = 0; i < m; i++){
+        int u = edges[i][0];
+        int v = edges[i][1];
+        adjList[u].push_back(v);
+        adjList[v].push_back(u);
+    }
+
+    int timer = 0;
+    int parent = -1;
+
+    vector<int> disc(n, -1);
+    vector<int> low(n, -1);
+    vector<bool> visisted(n, false);
+    vector<int> result;
+
+    for(int i = 0; i < n; i++){
+        if(!visisted[i]){
+            dfsArticulation(i, parent, timer, disc, low, result, adjList, visisted);
+        }
+    }
+
+    return result;
+
+}
+
+void ArticulationPointIngraphExec(){
+      vector<vector<int>> edges; // Stores edges in format {u, v, w}.
+    int n, m;                 // 'n' for nodes, 'm' for edges.
+
+    cout << "Enter the number of nodes : ";
+    cin >> n;
+
+    cout << "Enter the number of edges : ";
+    cin >> m;
+
+    cout << "Enter the edges (u v w): " << endl;
+    for(int i = 0; i < m; i++) {
+        int u, v;
+        cin >> u >> v;
+        edges.push_back({u, v});
+    }
+
+    vector<int> answer_articulation_points = cutVertes(edges, n, m);
+    
+    sort(answer_articulation_points.begin(), answer_articulation_points.end());
+
+    answer_articulation_points.erase(unique(answer_articulation_points.begin(), answer_articulation_points.end()), answer_articulation_points.end());
+
+
+    cout << "Articulation Points : " ;
+
+    if(answer_articulation_points.empty()){
+        cout << "None";
+    } else {
+        for(int ap:  answer_articulation_points){
+            cout << ap << " ";
+        }
+    }
+
+    cout << endl;
+}
+
+
 int main(){
 
     // exePrismMST();
 // DisjointSetExec();
 // kruskalsMSTExec();
-BridgesInParagraphExec();
+// BridgesInParagraphExec();
+ArticulationPointIngraphExec();
     return 0;
 }
