@@ -3,6 +3,7 @@
 #include<unordered_map>
 #include<list>
 #include<algorithm>
+#include<stack>
 #include<limits.h>
 using namespace std;
 
@@ -465,12 +466,102 @@ void ArticulationPointIngraphExec(){
 }
 
 
+void topoSort(int node, vector<bool> &visited, stack<int> &st, unordered_map<int, list<int>> &adjList) {
+    visited[node] = true;
+
+    for(int neigh: adjList[node]){
+        if(visited[neigh] == false){
+            topoSort(neigh, visited, st, adjList);
+        }
+    }
+
+    st.push(node);
+}
+
+void revDFS(int node, vector<bool> &visited, unordered_map<int, list<int>> &transpose){
+    visited[node] = true;
+
+    for(int neigh: transpose[node]){
+        if(visited[neigh] == false){
+            revDFS(neigh, visited, transpose);
+        }
+    }
+}
+
+int stronglyConnectedCoponents(vector<vector<int>> &edges, int n, int m){
+    unordered_map<int, list<int>> adjList;
+    for(int i = 0; i < m; i++){
+        int u = edges[i][0];
+        int v = edges[i][1];
+        adjList[u].push_back(v);
+    }
+
+    stack<int> st;
+    vector<bool> visited(n, false);
+
+    for(int i = 0; i < n; i++){
+        if(visited[i] == false){
+            topoSort(i, visited, st, adjList);
+        }
+    }
+
+    unordered_map<int, list<int>> transpose;
+    for(int i = 0; i < n; i++){
+        visited[i] = false;
+        for(int neigh: adjList[i]){
+            transpose[neigh].push_back(i);
+        }
+    }
+
+    int count = 0;
+    while(!st.empty()){
+        int top_node = st.top();
+        st.pop();
+
+
+        if(visited[top_node] == false){
+            count++;
+            revDFS(top_node, visited, transpose);
+        }
+    }
+
+    return count;
+}
+
+
+void KosarajuAlgorithmExec(){
+      vector<vector<int>> edges; // Stores edges in format {u, v, w}.
+    int n, m;                 // 'n' for nodes, 'm' for edges.
+
+    cout << "Enter the number of nodes : ";
+    cin >> n;
+
+    cout << "Enter the number of edges : ";
+    cin >> m;
+
+    cout << "Enter the edges (u v w): " << endl;
+    for(int i = 0; i < m; i++) {
+        int u, v;
+        cin >> u >> v;
+        edges.push_back({u, v});
+    }
+
+    int ssc_count = stronglyConnectedCoponents(edges, n, m);
+
+    cout << "total Strongly Connected Componets : " << ssc_count << endl;    
+
+
+    cout << endl;
+}
+
+
 int main(){
 
     // exePrismMST();
 // DisjointSetExec();
 // kruskalsMSTExec();
 // BridgesInParagraphExec();
-ArticulationPointIngraphExec();
+// ArticulationPointIngraphExec();
+KosarajuAlgorithmExec();
     return 0;
 }
